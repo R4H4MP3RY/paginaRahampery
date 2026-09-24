@@ -3,7 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Logout01Icon, News01Icon, Note01Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { requireAdmin } from "@/lib/auth";
 import { logout } from "@/lib/actions/auth";
-import { Logo } from "@/components/logo";
+import { Isotipo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const nav = [
@@ -20,7 +20,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           <div className="flex items-center gap-6">
             <Link href="/admin" aria-label="Panel">
-              <Logo className="h-9" />
+              <Isotipo />
             </Link>
             <nav aria-label="Panel" className="flex gap-1 text-sm font-medium">
               {nav.map((item) => (
