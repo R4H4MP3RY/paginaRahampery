@@ -1,10 +1,20 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-light: var(--brand-blue-light);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-light: var(--brand-green-light);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-skin: var(--brand-skin);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-orange-ink: var(--brand-orange-ink);
+  --color-brand-green-ink: var(--brand-green-ink);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -48,73 +58,51 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Colores del manual de identidad. No alterar los tonos de marca. */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
+  --brand-blue: #0370a4; /* escudo */
+  --brand-blue-light: #5ba0d8; /* muñequera */
+  --brand-green: #408340; /* bolsa, tono oscuro */
+  --brand-green-light: #54b156; /* bolsa, tono claro */
+  --brand-orange: #f18526; /* tipografía */
+  --brand-skin: #fddbb9; /* mano */
+  /* Derivados para interfaz (contraste AA sobre blanco). */
+  --brand-navy: #0e2640; /* fondo de la fotografía */
+  --brand-orange-ink: #a8540a;
+  --brand-green-ink: #2f6a30;
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #ffffff;
+  --foreground: #0f2336;
+  --card: #ffffff;
+  --card-foreground: #0f2336;
+  --popover: #ffffff;
+  --popover-foreground: #0f2336;
+  --primary: var(--brand-blue);
+  --primary-foreground: #ffffff;
+  --secondary: #eef5fa;
+  --secondary-foreground: #0f2336;
+  --muted: #f4f7fa;
+  --muted-foreground: #4a5b6b;
+  --accent: #fff3e8;
+  --accent-foreground: #7a3d05;
+  --destructive: #c62828;
+  --border: #dce5ec;
+  --input: #c9d6e0;
+  --ring: var(--brand-blue);
+  --chart-1: var(--brand-blue);
+  --chart-2: var(--brand-green-light);
+  --chart-3: var(--brand-orange);
+  --chart-4: var(--brand-blue-light);
+  --chart-5: var(--brand-green);
+  --radius: 0.75rem;
+  --sidebar: #f4f7fa;
+  --sidebar-foreground: #0f2336;
+  --sidebar-primary: var(--brand-blue);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eef5fa;
+  --sidebar-accent-foreground: #0f2336;
+  --sidebar-border: #dce5ec;
+  --sidebar-ring: var(--brand-blue);
 }
 
 @layer base {
@@ -125,6 +113,7 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    @apply font-sans scroll-smooth;
+    scroll-padding-top: 5rem;
   }
 }
