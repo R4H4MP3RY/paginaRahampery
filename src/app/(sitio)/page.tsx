@@ -11,7 +11,7 @@ import {
   Target01Icon,
   UserIcon,
 } from "@hugeicons/core-free-icons";
-import { Isotipo } from "@/components/logo";
+import { Isotipo, Logo } from "@/components/logo";
 import { PostCard } from "@/components/post-card";
 import { QuoteForm } from "@/components/quote-form";
 import {
@@ -118,9 +118,13 @@ export default async function Home() {
 
   return (
     <>
-      <Hero>
+      {/* Menos espacio arriba que en otras páginas: así el logo, el título y los botones
+          caben completos al entrar en pantallas de laptop (probado a 1522×778, Windows al 125 %). */}
+      <Hero className="pt-8">
         <div className="grid items-center gap-12 md:grid-cols-[1.1fr_0.9fr]">
           <div className="grid gap-6">
+            {/* Imagotipo horizontal grande: max-w-sm = 384 px, casi el ancho del texto de abajo. */}
+            <Logo priority className="mb-2 h-auto w-full max-w-sm" />
             <p className="text-rc-xs text-rc-energy-text font-semibold tracking-[0.16em] uppercase">
               Coach financiero · Zapopan y todo México
             </p>
