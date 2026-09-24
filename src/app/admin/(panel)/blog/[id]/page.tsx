@@ -35,7 +35,7 @@ export default async function EditPostPage({ params }: PageProps<"/admin/blog/[i
             <Link
               href={`/blog/${post.slug}`}
               target="_blank"
-              className="text-brand-blue inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
+              className="text-rc-primary inline-flex items-center gap-1.5 text-sm font-medium hover:underline"
             >
               <HugeiconsIcon icon={ViewIcon} size={18} />
               Ver en el sitio

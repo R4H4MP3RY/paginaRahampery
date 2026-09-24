@@ -1,23 +1,35 @@
 import Image from "next/image";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import Link from "next/link";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
   ArrowRight01Icon,
   Briefcase01Icon,
+  Calendar03Icon,
   ChartIncreaseIcon,
   CheckmarkCircle02Icon,
   Shield01Icon,
   Target01Icon,
   UserIcon,
-  WhatsappIcon,
 } from "@hugeicons/core-free-icons";
+import { Isotipo } from "@/components/logo";
 import { PostCard } from "@/components/post-card";
 import { QuoteForm } from "@/components/quote-form";
-import { CtaBand, FaqList, InsurersStrip, SectionHeading } from "@/components/sections";
+import {
+  CtaBand,
+  FaqList,
+  Hero,
+  IconTile,
+  InsurersStrip,
+  Section,
+  SectionHeading,
+  cardCls,
+  cardHoverCls,
+  container,
+} from "@/components/sections";
+import { buttonVariants } from "@/components/ui/button";
 import { servicePages } from "@/content/servicios";
 import { getPublishedPosts } from "@/lib/blog";
 import { categoryIcons, fallbackInsuranceIcon, insuranceIcons } from "@/lib/insurance-icons";
-import { buttonVariants } from "@/components/ui/button";
 import {
   insuranceCategories,
   offeredInsurances,
@@ -27,21 +39,26 @@ import {
   type InsuranceCategory,
   type Service,
 } from "@/lib/site";
+import { cn } from "@/lib/utils";
 import portrait from "../../../public/brand/rahampery-contreras.jpg";
 
+// Los tres colores cuentan la historia de la marca: azul protección, verde dinero, naranja energía.
 const benefits = [
   {
     icon: Target01Icon,
+    tone: "energy" as const,
     title: "Un plan a tu medida",
     text: "Tus metas, sueños y objetivos convertidos en un plan financiero de acuerdo con tus necesidades y posibilidades.",
   },
   {
     icon: ChartIncreaseIcon,
+    tone: "money" as const,
     title: "Tu dinero crece",
     text: "Mejor estructura, más enfoque y un aumento real en tu ahorro y patrimonio, sin dejar de disfrutar tu vida.",
   },
   {
     icon: Shield01Icon,
+    tone: "info" as const,
     title: "Tu familia protegida",
     text: "Cuidamos lo más importante: tú y los tuyos, con la protección adecuada para cada etapa.",
   },
@@ -89,6 +106,8 @@ const faqs = [
   },
 ];
 
+const linkArrowCls = "text-rc-primary text-rc-sm inline-flex items-center gap-1 font-semibold hover:underline";
+
 export default async function Home() {
   const latestPosts = await getPublishedPosts(3);
   const personas = services.filter((s) => s.audience === "personas");
@@ -99,44 +118,38 @@ export default async function Home() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-brand-navy relative overflow-hidden text-white">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_60%,#5a839566,transparent_60%)]"
-        />
-        <div className="relative mx-auto grid max-w-6xl items-end gap-8 px-4 pt-14 sm:px-6 md:grid-cols-[1.15fr_0.85fr] md:pt-20">
-          <div className="grid gap-6 pb-4 md:pb-24">
-            <p className="text-brand-orange text-sm font-semibold tracking-wide uppercase">
+      <Hero>
+        <div className="grid items-center gap-12 md:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-6">
+            <p className="text-rc-xs text-rc-energy-text font-semibold tracking-[0.16em] uppercase">
               Coach financiero · Zapopan y todo México
             </p>
-            <h1 className="text-4xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
-              Aprovecha, protege y haz crecer tu dinero{" "}
-              <span className="text-brand-orange">para cumplir tus metas</span>
+            <h1>
+              Tu dinero, protegido y creciendo, de la mano de <span className="text-rc-primary">tu coach financiero</span>
             </h1>
-            <p className="max-w-xl text-lg text-pretty text-white/80">
-              Soy {site.name}. Te acompaño con educación financiera real y un plan hecho a tu medida, sin dejar de
-              disfrutar tu dinero y tu vida.
+            <p className="text-rc-lg text-rc-muted max-w-[60ch] leading-relaxed">
+              Soy {site.name}. Te ayudo a aprovechar, proteger y hacer crecer tu dinero con educación financiera real y
+              un plan hecho a tu medida, sin dejar de disfrutar tu vida.
             </p>
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="mt-2 flex flex-wrap gap-3">
               <a
                 href={whatsappUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={buttonVariants({ variant: "whatsapp", size: "xl" })}
+                className={buttonVariants({ variant: "accent", size: "xl" })}
               >
-                <HugeiconsIcon icon={WhatsappIcon} />
-                Agenda tu cita por WhatsApp
+                <HugeiconsIcon icon={Calendar03Icon} />
+                Agenda tu cita
               </a>
-              <a href="#cotizar" className={buttonVariants({ variant: "outline-inverse", size: "xl" })}>
+              <a href="#cotizar" className={buttonVariants({ variant: "outline", size: "xl" })}>
                 Cotiza tu seguro gratis
               </a>
             </div>
-            <ul className="grid gap-2 pt-2 text-sm text-white/80 sm:flex sm:flex-wrap sm:gap-x-6">
+            <ul className="text-rc-sm text-rc-muted flex flex-wrap gap-x-6 gap-y-2">
               {["Desde 2020", `Agente de seguros · Cédula CNSF ${site.cnsf.cedula}`, "Presencial y en línea"].map(
                 (t) => (
-                  <li key={t} className="flex items-center gap-2">
-                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={18} className="text-brand-green-light" />
+                  <li key={t} className="inline-flex items-center gap-2">
+                    <HugeiconsIcon icon={CheckmarkCircle02Icon} size={20} className="text-rc-money" />
                     {t}
                   </li>
                 ),
@@ -144,42 +157,48 @@ export default async function Home() {
             </ul>
           </div>
 
-          <div className="relative mx-auto w-full max-w-sm md:max-w-none">
-            <Image
-              src={portrait}
-              alt={`${site.name}, coach financiero`}
-              priority
-              placeholder="blur"
-              sizes="(min-width: 768px) 40vw, 90vw"
-              // Difumina los bordes para que la foto se funda con el fondo.
-              className="h-auto w-full [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_72%,transparent),linear-gradient(to_right,transparent,black_20%,black_80%,transparent)] [mask-composite:intersect] [-webkit-mask-composite:source-in]"
-            />
+          <div className="relative mx-auto w-full max-w-md">
+            <div className="shadow-rc-2 overflow-hidden rounded-cta">
+              <Image
+                src={portrait}
+                alt={`${site.name}, coach financiero`}
+                priority
+                placeholder="blur"
+                sizes="(min-width: 768px) 28rem, 90vw"
+                className="aspect-[4/5] w-full object-cover object-top"
+              />
+            </div>
+            <div className="border-rc-line bg-rc-elevated shadow-rc-2 absolute -bottom-5 left-4 flex items-center gap-3 rounded-2xl border px-4 py-3 sm:-left-6">
+              <Isotipo />
+              <div className="grid leading-tight">
+                <span className="text-rc-heading text-rc-sm font-semibold">Agente certificado</span>
+                <span className="text-rc-muted text-rc-xs">CNSF · Cédula {site.cnsf.cedula}</span>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </Hero>
 
-      {/* Beneficios */}
-      <section className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6">
-        <SectionHeading
-          eyebrow="¿Por qué un coach financiero?"
-          title="Nadie nos enseñó a manejar el dinero. Aquí aprendes con acompañamiento real."
-        />
-        <ul className="grid gap-6 md:grid-cols-3">
-          {benefits.map((b) => (
-            <li key={b.title} className="bg-card grid content-start gap-3 rounded-2xl border p-6">
-              <span className="bg-secondary text-brand-blue flex size-12 items-center justify-center rounded-xl">
-                <HugeiconsIcon icon={b.icon} size={26} />
-              </span>
-              <h3 className="text-lg font-semibold">{b.title}</h3>
-              <p className="text-muted-foreground">{b.text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <Section>
+        <div className={cn(container, "grid gap-10")}>
+          <SectionHeading
+            eyebrow="¿Por qué un coach financiero?"
+            title="Nadie nos enseñó a manejar el dinero. Aquí aprendes con acompañamiento real."
+          />
+          <ul className="grid gap-6 md:grid-cols-3">
+            {benefits.map((b) => (
+              <li key={b.title} className={cardCls}>
+                <IconTile icon={b.icon} tone={b.tone} />
+                <h3 className="text-rc-lg">{b.title}</h3>
+                <p className="text-rc-muted">{b.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Section>
 
-      {/* Servicios */}
-      <section id="servicios" className="bg-muted">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6">
+      <Section id="servicios" tint>
+        <div className={cn(container, "grid gap-10")}>
           <SectionHeading
             eyebrow="Servicios"
             title="Consultoría y planes financieros"
@@ -195,51 +214,51 @@ export default async function Home() {
             />
           </div>
         </div>
-      </section>
+      </Section>
 
-      {/* Cómo funciona */}
-      <section className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6">
-        <SectionHeading eyebrow="Cómo trabajamos" title="Tres pasos para tomar el control de tu dinero" />
-        <ol className="grid gap-6 md:grid-cols-3">
-          {steps.map((s, i) => (
-            <li key={s.title} className="grid content-start gap-3">
-              <span className="bg-brand-orange text-brand-navy flex size-11 items-center justify-center rounded-full text-lg font-bold">
-                {i + 1}
-              </span>
-              <h3 className="text-lg font-semibold">{s.title}</h3>
-              <p className="text-muted-foreground">{s.text}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <Section>
+        <div className={cn(container, "grid gap-10")}>
+          <SectionHeading eyebrow="Cómo trabajamos" title="Tres pasos para tomar el control de tu dinero" />
+          <ol className="grid gap-8 md:grid-cols-3">
+            {steps.map((s, i) => (
+              <li key={s.title} className="grid content-start gap-3">
+                <span className="bg-rc-accent text-rc-on-accent text-rc-lg flex size-12 items-center justify-center rounded-full font-semibold">
+                  {i + 1}
+                </span>
+                <h3 className="text-rc-lg">{s.title}</h3>
+                <p className="text-rc-muted">{s.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </Section>
 
-      {/* Seguros */}
-      <section id="seguros" className="bg-secondary">
-        <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1fr_1.05fr]">
+      <Section id="seguros" tint>
+        <div className={cn(container, "grid gap-12 lg:grid-cols-[1fr_1.05fr]")}>
           <div className="grid content-start gap-8">
             <SectionHeading
               eyebrow="Seguros y retiro"
               title="Protege a tu familia y tu patrimonio"
               text="Te ayudo a elegir la protección adecuada y a preparar tu retiro. La cotización es gratuita."
             />
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               {categories.map((c) => (
-                <div key={c.id} className="grid content-start gap-3">
-                  <h3 className="flex items-center gap-2 font-semibold">
-                    <HugeiconsIcon icon={categoryIcons[c.id]} size={20} className="text-brand-blue" />
+                <div key={c.id} className={cn(cardCls, "gap-4")}>
+                  <h3 className="text-rc-md flex items-center gap-2">
+                    <HugeiconsIcon icon={categoryIcons[c.id]} size={22} className="text-rc-primary" />
                     {insuranceCategories[c.id]}
                   </h3>
-                  <ul className="text-muted-foreground grid gap-1.5">
+                  <ul className="text-rc-sm grid gap-2">
                     {c.items.map((i) => (
                       <li key={i.slug}>
                         <Link
                           href={`/seguros/${i.slug}`}
-                          className="hover:text-brand-blue flex items-center gap-2 underline-offset-2 hover:underline"
+                          className="text-rc-text hover:text-rc-primary inline-flex items-center gap-2 underline-offset-3 hover:underline"
                         >
                           <HugeiconsIcon
                             icon={insuranceIcons[i.slug] ?? fallbackInsuranceIcon}
-                            size={16}
-                            className="text-brand-green shrink-0"
+                            size={18}
+                            className="text-rc-money shrink-0"
                           />
                           {i.name}
                         </Link>
@@ -249,77 +268,80 @@ export default async function Home() {
                 </div>
               ))}
             </div>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-rc-sm text-rc-muted">
               ¿Ya tienes seguros y quieres saber si te convienen? Revisamos tus pólizas y buscamos mejores opciones en
-              una consultoría de $350 MXN por hora.{" "}
-              <Link href="/seguros" className="text-brand-blue font-semibold hover:underline">
+              una consultoría de <span className="text-rc-money font-semibold">$350 MXN por hora</span>.{" "}
+              <Link href="/seguros" className="text-rc-primary font-semibold hover:underline">
                 Ver todos los seguros
               </Link>
             </p>
           </div>
 
-          <div id="cotizar" className="bg-card rounded-2xl border p-6 shadow-sm sm:p-8">
-            <h3 className="mb-1 text-xl font-semibold">Solicita tu cotización</h3>
-            <p className="text-muted-foreground mb-6 text-sm">Te respondo con opciones a tu medida, sin compromiso.</p>
+          <div id="cotizar" className={cn(cardCls, "shadow-rc-2 gap-1 self-start p-6 sm:p-8")}>
+            <h3 className="text-rc-xl">Solicita tu cotización</h3>
+            <p className="text-rc-sm text-rc-muted mb-5">Te respondo con opciones a tu medida, sin compromiso.</p>
             <QuoteForm />
           </div>
         </div>
-      </section>
+      </Section>
 
       <InsurersStrip />
 
-      {/* Sobre mí */}
-      <section id="sobre-mi" className="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="grid content-start gap-5">
-          <SectionHeading eyebrow="Sobre mí" title={`Hola, soy ${site.name}`} />
-          <div className="text-muted-foreground grid gap-4 text-lg">
-            <p>
-              Desde los 12 años me interesé en las finanzas gracias a mis papás, que me llevaban a revisar sus cuentas de
-              banco, me enseñaron a ahorrar y me mostraban sus inversiones.
-            </p>
-            <p>
-              Con el tiempo me di cuenta de que no todos tenían esa cultura. Seguí aprendiendo, hice mis propias
-              inversiones y comencé a aconsejar a mi familia. En marzo de 2020 lancé mi marca para promover la educación
-              financiera y ayudar a más personas a aprovechar, proteger y hacer crecer su dinero, cuidando siempre lo más
-              importante: a ellas mismas.
-            </p>
+      <Section id="sobre-mi">
+        <div className={cn(container, "grid gap-12 lg:grid-cols-[1.2fr_0.8fr]")}>
+          <div className="grid content-start gap-5">
+            <SectionHeading eyebrow="Sobre mí" title={`Hola, soy ${site.name}`} />
+            <div className="text-rc-muted grid max-w-[68ch] gap-4">
+              <p>
+                Desde los 12 años el dinero, el ahorro y las inversiones han sido parte de mi vida. Mis papás me llevaban a
+                ahorrar a mi cuenta de banco y me dejaban escuchar lo que les explicaban de sus inversiones. Ahí empezó
+                todo: investigar, invertir, emprender pequeños negocios y, con el tiempo, aprender también a perder dinero
+                en inversiones de alto riesgo.
+              </p>
+              <p>
+                A lo largo de los años escuché las preocupaciones de muchas personas: no saber ahorrar, no saber invertir,
+                no tener un seguro que las proteja, caer en fraudes. Por eso, en{" "}
+                <strong className="text-rc-text">marzo de 2020</strong> nació esta marca: para promover la educación
+                financiera y ayudarte a aprovechar, proteger y hacer crecer tu dinero.
+              </p>
+            </div>
           </div>
+          <figure className="bg-rc-brand-blue grid content-center gap-4 self-start rounded-card p-8 text-white">
+            <blockquote className="text-rc-xl leading-snug font-medium text-balance">
+              <span className="text-rc-brand-orange">“</span>
+              {site.slogan}
+              <span className="text-rc-brand-orange">”</span>
+            </blockquote>
+            <figcaption className="text-rc-sm text-[#e1eef7]">— {site.name}</figcaption>
+          </figure>
         </div>
-        <figure className="bg-brand-navy grid content-center gap-4 self-start rounded-2xl p-8 text-white">
-          <blockquote className="text-2xl leading-snug font-medium text-balance">
-            <span className="text-brand-orange">“</span>
-            {site.slogan}
-            <span className="text-brand-orange">”</span>
-          </blockquote>
-          <figcaption className="text-sm text-white/70">— {site.name}</figcaption>
-        </figure>
-      </section>
+      </Section>
 
-      {/* Últimos artículos (solo si hay publicados) */}
       {latestPosts.length > 0 && (
-        <section className="mx-auto grid max-w-6xl gap-8 px-4 py-20 sm:px-6">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <SectionHeading eyebrow="Blog" title="Aprende a cuidar tu dinero" />
-            <Link href="/blog" className="text-brand-blue inline-flex items-center gap-1 font-semibold hover:underline">
-              Ver todos los artículos
-              <HugeiconsIcon icon={ArrowRight01Icon} size={18} />
-            </Link>
+        <Section tint>
+          <div className={cn(container, "grid gap-8")}>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <SectionHeading eyebrow="Blog" title="Aprende a cuidar tu dinero" />
+              <Link href="/blog" className={linkArrowCls}>
+                Ver todos los artículos
+                <HugeiconsIcon icon={ArrowRight01Icon} size={18} />
+              </Link>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {latestPosts.map((p) => (
+                <PostCard key={p.slug} post={p} />
+              ))}
+            </div>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {latestPosts.map((p) => (
-              <PostCard key={p.slug} post={p} />
-            ))}
-          </div>
-        </section>
+        </Section>
       )}
 
-      {/* Preguntas frecuentes */}
-      <section id="preguntas" className="bg-muted">
-        <div className="mx-auto grid max-w-3xl gap-8 px-4 py-20 sm:px-6">
+      <Section id="preguntas" tint={latestPosts.length === 0}>
+        <div className="mx-auto grid w-full max-w-3xl gap-8 px-6">
           <SectionHeading eyebrow="Preguntas frecuentes" title="Resolvemos tus dudas" />
           <FaqList faqs={faqs} />
         </div>
-      </section>
+      </Section>
 
       <CtaBand />
     </>
@@ -343,33 +365,33 @@ function ServiceGroup({
 }) {
   return (
     <div className="grid content-start gap-4">
-      <h3 className="flex items-center gap-2 text-xl font-semibold">
-        <HugeiconsIcon icon={icon} size={22} className="text-brand-blue" />
-        <Link href={href} className="hover:text-brand-blue underline-offset-4 hover:underline">
+      <h3 className="text-rc-xl flex items-center gap-3">
+        <IconTile icon={icon} />
+        <Link href={href} className="hover:text-rc-primary underline-offset-4 hover:underline">
           {title}
         </Link>
       </h3>
       <ul className="grid gap-4">
         {items.map((s) => (
-          <li key={s.slug} className="bg-card grid gap-3 rounded-2xl border p-6">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h4 className="text-lg font-semibold">{s.name}</h4>
-              <p className="text-brand-blue font-semibold">{s.price}</p>
+          <li key={s.slug} className={cn(cardCls, cardHoverCls)}>
+            <h4>{s.name}</h4>
+            <p className="text-rc-muted">{s.summary}</p>
+            <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
+              <p className="text-rc-money font-semibold tabular-nums">{s.price}</p>
+              <a
+                href={whatsappUrl(`Hola, me interesa: ${s.name}. ${site.whatsapp.message}`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonVariants({ variant: "ghost", size: "sm" })}
+              >
+                Me interesa
+                <HugeiconsIcon icon={ArrowRight01Icon} />
+              </a>
             </div>
-            <p className="text-muted-foreground">{s.summary}</p>
-            <a
-              href={whatsappUrl(`Hola, me interesa: ${s.name}. ${site.whatsapp.message}`)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-brand-blue inline-flex items-center gap-1 text-sm font-semibold hover:underline"
-            >
-              Me interesa
-              <HugeiconsIcon icon={ArrowRight01Icon} size={16} />
-            </a>
           </li>
         ))}
       </ul>
-      <Link href={href} className="text-brand-blue inline-flex items-center gap-1 font-semibold hover:underline">
+      <Link href={href} className={linkArrowCls}>
         Conoce más
         <HugeiconsIcon icon={ArrowRight01Icon} size={18} />
       </Link>

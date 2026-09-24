@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PostCard } from "@/components/post-card";
-import { Breadcrumbs, CtaBand, SectionHeading } from "@/components/sections";
+import { Breadcrumbs, CtaBand, Hero, Section, SectionHeading, container } from "@/components/sections";
 import { getPublishedPosts } from "@/lib/blog";
 import { site } from "@/lib/site";
 
@@ -21,31 +21,33 @@ export default async function BlogPage() {
 
   return (
     <>
-      <section className="bg-secondary">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:px-6 md:py-16">
+      <Hero>
+        <div className="grid gap-6">
           <Breadcrumbs items={[{ name: "Blog", href: "/blog" }]} />
           <SectionHeading
             as="h1"
-            eyebrow="Blog"
-            title="Educación financiera para tomar mejores decisiones"
-            text="Consejos prácticos para aprovechar, proteger y hacer crecer tu dinero."
+            eyebrow="Educación financiera"
+            title="Aprende a aprovechar, proteger y hacer crecer tu dinero"
+            text="Consejos prácticos, explicados paso a paso y sin tecnicismos."
           />
         </div>
-      </section>
+      </Hero>
 
-      <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6">
-        {posts.length === 0 ? (
-          <p className="text-muted-foreground rounded-2xl border p-10 text-center text-lg">
-            Muy pronto publicaré los primeros artículos. ¡Vuelve pronto!
-          </p>
-        ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((p) => (
-              <PostCard key={p.slug} post={p} />
-            ))}
-          </div>
-        )}
-      </div>
+      <Section>
+        <div className={container}>
+          {posts.length === 0 ? (
+            <p className="bg-rc-surface text-rc-lg text-rc-muted rounded-card p-10 text-center">
+              Muy pronto publicaré los primeros artículos. ¡Vuelve pronto!
+            </p>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {posts.map((p) => (
+                <PostCard key={p.slug} post={p} />
+              ))}
+            </div>
+          )}
+        </div>
+      </Section>
 
       <CtaBand />
     </>

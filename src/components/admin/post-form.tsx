@@ -11,7 +11,7 @@ import { savePost } from "@/lib/actions/posts";
 import { slugify, type PostFormState, type PostRecord } from "@/lib/blog-schema";
 import { uploadBlogImage } from "@/lib/upload-image";
 
-const fieldCls = "h-10 bg-white text-base md:text-sm";
+const fieldCls = "min-h-11";
 
 export function PostForm({ post, coverUrl }: { post?: PostRecord; coverUrl?: string | null }) {
   const [state, action, pending] = useActionState<PostFormState, FormData>(savePost, {});
@@ -66,13 +66,13 @@ export function PostForm({ post, coverUrl }: { post?: PostRecord; coverUrl?: str
               setTitle(e.target.value);
               if (!slugTouched) setSlug(slugify(e.target.value));
             }}
-            className="h-12 bg-white text-lg font-semibold md:text-lg"
+            className="h-12 bg-rc-elevated text-lg font-semibold md:text-lg"
           />
         </Field>
 
         <Field id="slug" label="URL del artículo" error={err("slug")}>
           <div className="flex items-center">
-            <span className="text-muted-foreground bg-muted flex h-10 items-center rounded-l-md border border-r-0 px-2 text-sm">
+            <span className="text-rc-muted bg-rc-surface border-rc-line flex min-h-11 items-center rounded-l-full border-[1.5px] border-r-0 pr-2 pl-5 text-rc-sm">
               /blog/
             </span>
             <Input
@@ -100,7 +100,7 @@ export function PostForm({ post, coverUrl }: { post?: PostRecord; coverUrl?: str
             maxLength={300}
             value={excerpt}
             onChange={(e) => setExcerpt(e.target.value)}
-            className="min-h-20 bg-white text-base md:text-sm"
+            className="min-h-20 bg-rc-elevated text-base md:text-sm"
           />
         </Field>
 
@@ -111,10 +111,10 @@ export function PostForm({ post, coverUrl }: { post?: PostRecord; coverUrl?: str
       </div>
 
       <aside className="grid content-start gap-5">
-        <div className="grid gap-3 rounded-xl border bg-white p-4">
+        <div className="grid gap-3 rounded-xl border bg-rc-elevated p-4">
           <p className="text-sm">
             Estado:{" "}
-            <strong className={isPublished ? "text-brand-green-ink" : "text-brand-orange-ink"}>
+            <strong className={isPublished ? "text-rc-money" : "text-rc-energy-text"}>
               {isPublished ? "Publicado" : "Borrador"}
             </strong>
           </p>
@@ -131,13 +131,13 @@ export function PostForm({ post, coverUrl }: { post?: PostRecord; coverUrl?: str
             </Button>
           )}
           {state.message && (
-            <p role={state.ok ? "status" : "alert"} className={`text-sm ${state.ok ? "text-brand-green-ink" : "text-destructive"}`}>
+            <p role={state.ok ? "status" : "alert"} className={`text-sm ${state.ok ? "text-rc-money" : "text-destructive"}`}>
               {state.message}
             </p>
           )}
         </div>
 
-        <div className="grid gap-3 rounded-xl border bg-white p-4">
+        <div className="grid gap-3 rounded-xl border bg-rc-elevated p-4">
           <span className="text-sm font-medium">Imagen de portada</span>
           {cover && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -174,7 +174,7 @@ export function PostForm({ post, coverUrl }: { post?: PostRecord; coverUrl?: str
           </Field>
         </div>
 
-        <div className="grid gap-3 rounded-xl border bg-white p-4">
+        <div className="grid gap-3 rounded-xl border bg-rc-elevated p-4">
           <Field id="category" label="Categoría" error={err("category")}>
             <Input
               id="category"
@@ -193,7 +193,7 @@ export function PostForm({ post, coverUrl }: { post?: PostRecord; coverUrl?: str
           </Field>
         </div>
 
-        <div className="grid gap-3 rounded-xl border bg-white p-4">
+        <div className="grid gap-3 rounded-xl border bg-rc-elevated p-4">
           <span className="text-sm font-medium">SEO (Google)</span>
           <Field id="seoTitle" label={`Título para Google (${seoTitle.length}/70)`} error={err("seoTitle")}>
             <Input
@@ -213,7 +213,7 @@ export function PostForm({ post, coverUrl }: { post?: PostRecord; coverUrl?: str
               maxLength={170}
               value={seoDescription}
               onChange={(e) => setSeoDescription(e.target.value)}
-              className="min-h-20 bg-white text-base md:text-sm"
+              className="min-h-20 bg-rc-elevated text-base md:text-sm"
             />
           </Field>
           <p className="text-muted-foreground text-xs">Si los dejas vacíos se usan el título y el resumen.</p>

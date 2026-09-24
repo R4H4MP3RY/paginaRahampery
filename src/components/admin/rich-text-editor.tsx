@@ -34,7 +34,7 @@ export function RichTextEditor({ name, initialContent }: { name: string; initial
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        class: "prose prose-slate max-w-none min-h-96 px-5 py-4 focus:outline-none",
+        class: "prose prose-rc max-w-none min-h-96 px-5 py-4 focus:outline-none",
         "aria-label": "Contenido del artículo",
       },
     },
@@ -91,7 +91,7 @@ export function RichTextEditor({ name, initialContent }: { name: string; initial
   }
 
   return (
-    <div className="rounded-xl border bg-white">
+    <div className="rounded-xl border bg-rc-elevated">
       <input type="hidden" name={name} value={json} />
       <div role="toolbar" aria-label="Formato" className="flex flex-wrap gap-0.5 border-b p-1.5">
         <ToolButton label="Título" icon={Heading02Icon} active={active?.h2} onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()} />
@@ -150,7 +150,7 @@ function ToolButton({
       disabled={disabled}
       onClick={onClick}
       className={`flex size-9 items-center justify-center rounded-md transition-colors disabled:opacity-50 ${
-        active ? "bg-brand-blue text-white" : "hover:bg-muted"
+        active ? "bg-rc-primary text-rc-on-primary" : "hover:bg-muted"
       }`}
     >
       <HugeiconsIcon icon={icon} size={18} />

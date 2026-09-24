@@ -6,7 +6,7 @@ import { z } from "zod";
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyTurnstile } from "@/lib/turnstile";
-import { quoteSchema, type QuoteFormState } from "@/lib/quote-schema";
+import { ageFrom, quoteSchema, sexOptions, type QuoteFormState } from "@/lib/quote-schema";
 import { insurances } from "@/lib/site";
 
 export async function submitQuote(_prev: QuoteFormState, formData: FormData): Promise<QuoteFormState> {
@@ -14,7 +14,7 @@ export async function submitQuote(_prev: QuoteFormState, formData: FormData): Pr
   if (formData.get("website")) return { ok: true, message: "¡Gracias! Te contactaré muy pronto." };
 
   const values = Object.fromEntries(
-    ["fullName", "email", "phone", "city", "insuranceType", "message", "privacy"].map((k) => [
+    ["fullName", "email", "phone", "birthDate", "sex", "city", "insuranceType", "message", "privacy"].map((k) => [
       k,
       String(formData.get(k) ?? ""),
     ]),
@@ -51,6 +51,8 @@ export async function submitQuote(_prev: QuoteFormState, formData: FormData): Pr
     full_name: data.fullName,
     email: data.email,
     phone: data.phone,
+    birth_date: data.birthDate,
+    sex: data.sex,
     city: data.city ?? null,
     insurance_type: data.insuranceType,
     message: data.message ?? null,
@@ -85,6 +87,8 @@ async function notifyNewQuote(data: z.infer<typeof quoteSchema>) {
     `Nombre: ${data.fullName}`,
     `Correo: ${data.email}`,
     `Teléfono: ${data.phone}`,
+    `Fecha de nacimiento: ${data.birthDate} (${ageFrom(data.birthDate)} años)`,
+    `Sexo: ${sexOptions.find((o) => o.value === data.sex)?.label ?? data.sex}`,
     `Ciudad: ${data.city ?? "-"}`,
     "",
     data.message ?? "",

@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/auth";
 import { updateQuote } from "@/lib/actions/quotes";
 import { quoteStatuses, statusLabels, type QuoteStatus } from "@/lib/quote-status";
+import { ageFrom, sexOptions } from "@/lib/quote-schema";
 import { insurances } from "@/lib/site";
 
 const statusStyles: Record<QuoteStatus, string> = {
-  nueva: "bg-brand-orange/15 text-brand-orange-ink",
-  en_proceso: "bg-brand-blue/10 text-brand-blue",
-  cotizada: "bg-brand-blue-light/20 text-brand-blue",
-  cerrada: "bg-brand-green-light/15 text-brand-green-ink",
+  nueva: "bg-rc-energy-soft text-rc-energy-text",
+  en_proceso: "bg-rc-info-soft text-rc-primary",
+  cotizada: "bg-rc-surface-2 text-rc-primary",
+  cerrada: "bg-rc-money-soft text-rc-money",
   descartada: "bg-muted text-muted-foreground",
 };
 
@@ -21,6 +22,8 @@ type Quote = {
   full_name: string;
   email: string;
   phone: string;
+  birth_date: string | null;
+  sex: string | null;
   city: string | null;
   insurance_type: string;
   message: string | null;
@@ -28,6 +31,7 @@ type Quote = {
   admin_notes: string | null;
 };
 
+const birthFmt = new Intl.DateTimeFormat("es-MX", { dateStyle: "long", timeZone: "America/Mexico_City" });
 const dateFmt = new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Mexico_City" });
 
 export default async function QuotesPage({ searchParams }: PageProps<"/admin">) {
@@ -54,7 +58,7 @@ export default async function QuotesPage({ searchParams }: PageProps<"/admin">) 
 
       {error && <p className="text-destructive">No se pudieron cargar las solicitudes.</p>}
       {!error && quotes.length === 0 && (
-        <p className="text-muted-foreground rounded-xl border bg-white p-8 text-center">No hay solicitudes todavía.</p>
+        <p className="text-muted-foreground rounded-xl border bg-rc-elevated p-8 text-center">No hay solicitudes todavía.</p>
       )}
 
       <ul className="grid gap-4">
@@ -63,13 +67,20 @@ export default async function QuotesPage({ searchParams }: PageProps<"/admin">) 
           const phoneDigits = q.phone.replace(/\D/g, "");
           const wa = `https://wa.me/${phoneDigits.length === 10 ? `52${phoneDigits}` : phoneDigits}`;
           return (
-            <li key={q.id} className="grid gap-4 rounded-xl border bg-white p-5">
+            <li key={q.id} className="grid gap-4 rounded-xl border bg-rc-elevated p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="grid gap-1">
                   <p className="font-semibold">{q.full_name}</p>
                   <p className="text-muted-foreground text-sm">
                     {insurance} · {q.city || "Sin ciudad"} · {dateFmt.format(new Date(q.created_at))}
                   </p>
+                  {(q.birth_date || q.sex) && (
+                    <p className="text-muted-foreground text-sm">
+                      {q.birth_date && `${ageFrom(q.birth_date)} años (nació el ${birthFmt.format(new Date(`${q.birth_date}T12:00:00`))})`}
+                      {q.birth_date && q.sex && " · "}
+                      {q.sex && (sexOptions.find((o) => o.value === q.sex)?.label ?? q.sex)}
+                    </p>
+                  )}
                 </div>
                 <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${statusStyles[q.status]}`}>
                   {statusLabels[q.status]}
@@ -77,7 +88,7 @@ export default async function QuotesPage({ searchParams }: PageProps<"/admin">) 
               </div>
 
               <div className="flex flex-wrap gap-4 text-sm">
-                <a href={`mailto:${q.email}`} className="text-brand-blue inline-flex items-center gap-1.5 hover:underline">
+                <a href={`mailto:${q.email}`} className="text-rc-primary inline-flex items-center gap-1.5 hover:underline">
                   <HugeiconsIcon icon={Mail01Icon} size={16} />
                   {q.email}
                 </a>
@@ -85,7 +96,7 @@ export default async function QuotesPage({ searchParams }: PageProps<"/admin">) 
                   href={wa}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-brand-green-ink inline-flex items-center gap-1.5 hover:underline"
+                  className="text-rc-money inline-flex items-center gap-1.5 hover:underline"
                 >
                   <HugeiconsIcon icon={WhatsappIcon} size={16} />
                   {q.phone}
@@ -101,7 +112,7 @@ export default async function QuotesPage({ searchParams }: PageProps<"/admin">) 
                   <select
                     name="status"
                     defaultValue={q.status}
-                    className="border-input h-9 rounded-md border bg-white px-2 text-sm"
+                    className="border-input h-9 rounded-md border bg-rc-elevated px-2 text-sm"
                   >
                     {quoteStatuses.map((s) => (
                       <option key={s} value={s}>
@@ -117,7 +128,7 @@ export default async function QuotesPage({ searchParams }: PageProps<"/admin">) 
                     defaultValue={q.admin_notes ?? ""}
                     rows={1}
                     maxLength={4000}
-                    className="border-input field-sizing-content min-h-9 rounded-md border bg-white px-2 py-1.5 text-sm"
+                    className="border-input field-sizing-content min-h-9 rounded-md border bg-rc-elevated px-2 py-1.5 text-sm"
                   />
                 </label>
                 <Button type="submit" size="lg" className="sm:mt-5">
@@ -137,7 +148,7 @@ function FilterLink({ href, active, label }: { href: string; active: boolean; la
     <Link
       href={href}
       aria-current={active ? "page" : undefined}
-      className={`rounded-full border px-3 py-1.5 ${active ? "bg-brand-blue border-brand-blue text-white" : "bg-white hover:bg-white/60"}`}
+      className={`rounded-full border px-3 py-1.5 ${active ? "bg-rc-primary border-rc-primary text-rc-on-primary" : "bg-rc-elevated hover:bg-rc-surface"}`}
     >
       {label}
     </Link>

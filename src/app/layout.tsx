@@ -1,13 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Jost } from "next/font/google";
+import { Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { JsonLd } from "@/components/json-ld";
 import { site } from "@/lib/site";
+import { themeInitScript } from "@/lib/theme";
 
-// El manual pide Century Gothic (licencia comercial, no disponible para web).
-// Jost es la alternativa libre más cercana: geométrica, con "a" de un solo piso.
-const jost = Jost({ subsets: ["latin"], variable: "--font-sans" });
+// Tipografía oficial del Manual de Identidad: Poppins (Regular, Medium, SemiBold, Bold).
+// next/font la aloja en el propio dominio; Century Gothic y Arial quedan como respaldo.
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
+  fallback: ["Century Gothic", "Segoe UI", "Arial", "sans-serif"],
+});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -56,6 +62,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a1820" },
+  ],
 };
 
 const organizationJsonLd = {
@@ -77,7 +87,7 @@ const organizationJsonLd = {
       "@id": `${site.url}/#negocio`,
       name: `${site.name} Coach Financiero`,
       slogan: site.slogan,
-      logo: `${site.url}/brand/logo.png`,
+      logo: `${site.url}/brand/perfil-redes.png`,
       image: `${site.url}/brand/rahampery-contreras.jpg`,
       description: site.description,
       url: site.url,
@@ -116,10 +126,15 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    // suppressHydrationWarning: el script de tema cambia data-theme antes de que React hidrate.
     <html
       lang="es-MX"
-      className={cn("h-full", "antialiased", geistMono.variable, "font-sans", jost.variable)}
+      suppressHydrationWarning
+      className={cn("h-full", "antialiased", geistMono.variable, "font-sans", poppins.variable)}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-full flex flex-col">
         <JsonLd data={organizationJsonLd} />
         {children}

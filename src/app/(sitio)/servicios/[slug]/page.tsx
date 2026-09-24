@@ -1,12 +1,25 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { CheckmarkCircle02Icon, WhatsappIcon } from "@hugeicons/core-free-icons";
+import { Calendar03Icon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 import { JsonLd } from "@/components/json-ld";
-import { Breadcrumbs, CtaBand, FaqList, SectionHeading } from "@/components/sections";
+import {
+  Breadcrumbs,
+  CtaBand,
+  FaqList,
+  Hero,
+  IconTile,
+  Section,
+  SectionHeading,
+  cardCls,
+  container,
+} from "@/components/sections";
 import { buttonVariants } from "@/components/ui/button";
 import { getServicePage, servicePages } from "@/content/servicios";
 import { services, site, whatsappUrl } from "@/lib/site";
+import { cn } from "@/lib/utils";
+
+const tones = ["info", "money", "energy"] as const;
 
 export const dynamicParams = false;
 
@@ -56,57 +69,56 @@ export default async function ServicePage({ params }: PageProps<"/servicios/[slu
         }}
       />
 
-      <section className="bg-brand-navy text-white">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-14 sm:px-6 md:py-20">
-          <Breadcrumbs tone="dark" items={[{ name: page.navLabel, href: `/servicios/${slug}` }]} />
-          <div className="grid max-w-3xl gap-4">
-            <p className="text-brand-orange text-sm font-semibold tracking-wide uppercase">{page.eyebrow}</p>
-            <h1 className="text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-5xl">{page.h1}</h1>
-            <p className="text-lg text-pretty text-white/80">{page.intro}</p>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
+      <Hero>
+        <div className="grid gap-6">
+          <Breadcrumbs items={[{ name: page.navLabel, href: `/servicios/${slug}` }]} />
+          <SectionHeading as="h1" eyebrow={page.eyebrow} title={page.h1} text={page.intro} className="max-w-[60rem]" />
+          <div className="flex flex-wrap gap-3">
             <a
               href={whatsappUrl(page.whatsappMessage)}
               target="_blank"
               rel="noopener noreferrer"
-              className={buttonVariants({ variant: "whatsapp", size: "xl" })}
+              className={buttonVariants({ variant: "accent", size: "xl" })}
             >
-              <HugeiconsIcon icon={WhatsappIcon} />
-              Agenda tu cita por WhatsApp
+              <HugeiconsIcon icon={Calendar03Icon} />
+              Agenda tu cita
             </a>
-            <a href="#precios" className={buttonVariants({ variant: "outline-inverse", size: "xl" })}>
+            <a href="#precios" className={buttonVariants({ variant: "outline", size: "xl" })}>
               Ver precios
             </a>
           </div>
         </div>
-      </section>
+      </Hero>
 
-      <section className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6">
-        <SectionHeading eyebrow="Lo que resolvemos" title={page.problemsTitle} />
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {page.problems.map((p) => (
-            <li key={p.title} className="bg-card grid content-start gap-2 rounded-2xl border p-6">
-              <h3 className="text-lg font-semibold">{p.title}</h3>
-              <p className="text-muted-foreground">{p.text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <Section>
+        <div className={cn(container, "grid gap-10")}>
+          <SectionHeading eyebrow="Lo que resolvemos" title={page.problemsTitle} />
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {page.problems.map((p, i) => (
+              <li key={p.title} className={cardCls}>
+                <IconTile icon={CheckmarkCircle02Icon} tone={tones[i % tones.length]} />
+                <h3 className="text-rc-lg">{p.title}</h3>
+                <p className="text-rc-muted">{p.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Section>
 
-      <section id="precios" className="bg-muted">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6">
+      <Section id="precios" tint>
+        <div className={cn(container, "grid gap-10")}>
           <SectionHeading eyebrow="Precios" title="Elige cómo quieres empezar" />
           <ul className="grid gap-6 md:grid-cols-2">
             {offers.map((s) => (
-              <li key={s.slug} className="bg-card grid content-start gap-4 rounded-2xl border p-8">
-                <h3 className="text-xl font-semibold">{s.name}</h3>
-                <p className="text-brand-blue text-2xl font-semibold">{s.price}</p>
-                <p className="text-muted-foreground">{s.summary}</p>
+              <li key={s.slug} className={cn(cardCls, "gap-4 p-8")}>
+                <h3 className="text-rc-xl">{s.name}</h3>
+                <p className="text-rc-money text-rc-xl font-semibold tabular-nums">{s.price}</p>
+                <p className="text-rc-muted">{s.summary}</p>
                 <a
                   href={whatsappUrl(`Hola, me interesa: ${s.name}. ${site.whatsapp.message}`)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={buttonVariants({ size: "xl", className: "justify-self-start" })}
+                  className={buttonVariants({ className: "mt-auto self-start" })}
                 >
                   Me interesa
                 </a>
@@ -114,26 +126,30 @@ export default async function ServicePage({ params }: PageProps<"/servicios/[slu
             ))}
           </ul>
         </div>
-      </section>
+      </Section>
 
-      <section className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2">
-        <SectionHeading eyebrow="El proceso" title={page.processTitle} />
-        <ul className="grid content-start gap-3">
-          {page.process.map((item) => (
-            <li key={item} className="flex gap-3 text-lg">
-              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={22} className="text-brand-green mt-1 shrink-0" />
-              <span className="text-muted-foreground">{item}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <Section>
+        <div className={cn(container, "grid gap-10 lg:grid-cols-2")}>
+          <SectionHeading eyebrow="El proceso" title={page.processTitle} />
+          <ol className="grid content-start gap-4">
+            {page.process.map((item, i) => (
+              <li key={item} className="flex gap-4">
+                <span className="bg-rc-accent text-rc-on-accent flex size-9 shrink-0 items-center justify-center rounded-full font-semibold">
+                  {i + 1}
+                </span>
+                <span className="text-rc-muted pt-1">{item}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </Section>
 
-      <section className="bg-muted">
-        <div className="mx-auto grid max-w-3xl gap-8 px-4 py-20 sm:px-6">
+      <Section tint>
+        <div className="mx-auto grid w-full max-w-3xl gap-8 px-6">
           <SectionHeading eyebrow="Preguntas frecuentes" title="Resolvemos tus dudas" />
           <FaqList faqs={page.faqs} />
         </div>
-      </section>
+      </Section>
 
       <CtaBand message={page.whatsappMessage} />
     </>

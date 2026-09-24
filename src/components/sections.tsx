@@ -1,45 +1,116 @@
 import Link from "next/link";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon, Calendar03Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { Calendar03Icon } from "@hugeicons/core-free-icons";
 import { JsonLd } from "@/components/json-ld";
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { insurers, site, whatsappUrl } from "@/lib/site";
 import type { Faq } from "@/content/seguros";
 
+// Bloques de rc-brand.css convertidos a componentes. Cada comentario indica la sección del CSS.
+
+/** .rc-container */
+export const container = "mx-auto w-full max-w-[1160px] px-6";
+
+/** .rc-section y .rc-section--tint */
+export function Section({
+  tint,
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"section"> & { tint?: boolean }) {
+  return (
+    <section className={cn("py-16", tint && "bg-rc-surface", className)} {...props}>
+      {children}
+    </section>
+  );
+}
+
+/** .rc-hero: degradado del fondo claro de marca al fondo de la página. */
+export function Hero({ className, children }: { className?: string; children: React.ReactNode }) {
+  return (
+    <section className={cn("from-rc-surface to-rc-bg bg-linear-to-b pt-16 pb-12", className)}>
+      <div className={container}>{children}</div>
+    </section>
+  );
+}
+
+/** .rc-eyebrow + título + .rc-lead */
 export function SectionHeading({
   eyebrow,
   title,
   text,
   as: Heading = "h2",
+  className,
 }: {
   eyebrow: string;
   title: string;
   text?: string;
   as?: "h1" | "h2";
+  className?: string;
 }) {
   return (
-    <div className="grid max-w-2xl gap-3">
-      <p className="text-brand-orange-ink text-sm font-semibold tracking-wide uppercase">{eyebrow}</p>
-      <Heading className="text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-4xl">{title}</Heading>
-      {text && <p className="text-muted-foreground text-lg text-pretty">{text}</p>}
+    <div className={cn("grid max-w-[68ch] gap-3", className)}>
+      <p className="text-rc-xs text-rc-energy-text font-semibold tracking-[0.16em] uppercase">{eyebrow}</p>
+      <Heading>{title}</Heading>
+      {text && <p className="text-rc-lg text-rc-muted leading-relaxed text-pretty">{text}</p>}
     </div>
   );
 }
 
+/** .rc-card (y a.rc-card:hover cuando es un enlace) */
+export const cardCls =
+  "border-rc-line bg-rc-elevated shadow-rc-1 flex flex-col gap-3 rounded-card border p-6 transition-[box-shadow,transform,border-color] duration-250 ease-rc";
+export const cardHoverCls =
+  "hover:shadow-rc-2 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--rc-primary)_35%,var(--rc-line))]";
+
+/** .rc-card__icon con sus variantes --money y --energy */
+export function IconTile({ icon, tone = "info" }: { icon: IconSvgElement; tone?: "info" | "money" | "energy" }) {
+  const tones = {
+    info: "bg-rc-info-soft text-rc-primary",
+    money: "bg-rc-money-soft text-rc-money",
+    energy: "bg-rc-energy-soft text-rc-energy-text",
+  };
+  return (
+    <span className={cn("grid size-[52px] shrink-0 place-items-center rounded-2xl", tones[tone])}>
+      <HugeiconsIcon icon={icon} size={26} />
+    </span>
+  );
+}
+
+/** .rc-chip con sus variantes */
+export function Chip({ tone = "seguros", children }: { tone?: "seguros" | "inversion" | "ahorro"; children: React.ReactNode }) {
+  const tones = {
+    seguros: "bg-rc-info-soft text-rc-primary",
+    inversion: "bg-rc-money-soft text-rc-money",
+    ahorro: "bg-rc-energy-soft text-rc-energy-text",
+  };
+  return (
+    <span
+      className={cn(
+        "text-rc-xs inline-flex items-center gap-1.5 rounded-full px-3 py-1 leading-normal font-medium before:size-[7px] before:rounded-full before:bg-current",
+        tones[tone],
+      )}
+    >
+      {children}
+    </span>
+  );
+}
+
+/** .rc-faq: preguntas con + / – */
 export function FaqList({ faqs }: { faqs: Faq[] }) {
   return (
-    <div className="grid gap-3">
+    <div className="flex flex-col gap-3">
       {faqs.map((f) => (
-        <details key={f.q} className="group bg-card rounded-xl border px-5 open:pb-5">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-medium [&::-webkit-details-marker]:hidden">
+        <details key={f.q} className="group border-rc-line bg-rc-elevated rounded-xl border px-6 py-4">
+          <summary className="text-rc-heading flex cursor-pointer list-none justify-between gap-4 font-semibold [&::-webkit-details-marker]:hidden">
             {f.q}
-            <HugeiconsIcon
-              icon={ArrowRight01Icon}
-              size={20}
-              className="text-brand-blue shrink-0 transition-transform group-open:rotate-90"
-            />
+            <span aria-hidden="true" className="text-rc-primary text-[1.4em] leading-none">
+              <span className="group-open:hidden">+</span>
+              <span className="hidden group-open:inline">–</span>
+            </span>
           </summary>
-          <p className="text-muted-foreground">{f.a}</p>
+          <p className="text-rc-sm text-rc-muted mt-3">{f.a}</p>
         </details>
       ))}
     </div>
@@ -48,12 +119,12 @@ export function FaqList({ faqs }: { faqs: Faq[] }) {
 
 export function InsurersStrip() {
   return (
-    <section aria-labelledby="aseguradoras" className="border-y bg-white">
-      <div className="mx-auto grid max-w-6xl gap-5 px-4 py-10 sm:px-6">
-        <h2 id="aseguradoras" className="text-muted-foreground text-center text-sm font-medium">
+    <section aria-labelledby="aseguradoras" className="border-rc-line border-y">
+      <div className={cn(container, "grid gap-5 py-10")}>
+        <h2 id="aseguradoras" className="text-rc-xs text-rc-muted text-center font-semibold tracking-[0.16em] uppercase">
           Comparo opciones de las principales aseguradoras
         </h2>
-        <ul className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-lg font-semibold text-slate-500">
+        <ul className="text-rc-lg text-rc-heading/70 flex flex-wrap justify-center gap-x-8 gap-y-3 font-semibold">
           {insurers.map((name) => (
             <li key={name}>{name}</li>
           ))}
@@ -63,6 +134,7 @@ export function InsurersStrip() {
   );
 }
 
+/** .rc-cta: bloque azul redondeado dentro del contenedor. */
 export function CtaBand({
   title = "Da hoy el primer paso hacia tus metas",
   text = "Agenda tu cita y empecemos a trabajar en tu plan financiero.",
@@ -73,35 +145,30 @@ export function CtaBand({
   message?: string;
 }) {
   return (
-    <section className="bg-brand-blue text-white">
-      <div className="mx-auto grid max-w-6xl justify-items-start gap-6 px-4 py-16 sm:px-6 md:grid-cols-[1fr_auto] md:items-center">
-        <div className="grid gap-2">
-          <h2 className="text-3xl font-semibold text-balance">{title}</h2>
-          <p className="text-white/85">{text}</p>
+    <Section>
+      <div className={container}>
+        <div className="bg-rc-brand-blue grid items-center gap-6 rounded-cta p-8 text-white sm:p-12 md:grid-cols-[1fr_auto]">
+          <div className="grid gap-2">
+            <h2 className="text-white">{title}</h2>
+            <p className="text-[#e1eef7]">{text}</p>
+          </div>
+          <a
+            href={whatsappUrl(message)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ variant: "accent", size: "xl", className: "justify-self-start" })}
+          >
+            <HugeiconsIcon icon={Calendar03Icon} />
+            Agendar por WhatsApp
+          </a>
         </div>
-        <a
-          href={whatsappUrl(message)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={buttonVariants({ variant: "inverse", size: "xl" })}
-        >
-          <HugeiconsIcon icon={Calendar03Icon} />
-          Agendar por WhatsApp
-        </a>
       </div>
-    </section>
+    </Section>
   );
 }
 
 // Migas de pan visibles + datos estructurados BreadcrumbList para Google.
-export function Breadcrumbs({
-  items,
-  tone = "light",
-}: {
-  items: { name: string; href: string }[];
-  tone?: "light" | "dark";
-}) {
-  const dark = tone === "dark";
+export function Breadcrumbs({ items }: { items: { name: string; href: string }[] }) {
   const all = [{ name: "Inicio", href: "/" }, ...items];
   return (
     <>
@@ -117,17 +184,17 @@ export function Breadcrumbs({
           })),
         }}
       />
-      <nav aria-label="Ruta de navegación" className={dark ? "text-sm text-white/70" : "text-muted-foreground text-sm"}>
+      <nav aria-label="Ruta de navegación" className="text-rc-sm text-rc-muted">
         <ol className="flex flex-wrap items-center gap-1.5">
           {all.map((item, i) => (
             <li key={item.href} className="flex items-center gap-1.5">
               {i > 0 && <span aria-hidden="true">/</span>}
               {i < all.length - 1 ? (
-                <Link href={item.href} className={`underline-offset-2 hover:underline ${dark ? "hover:text-white" : "hover:text-foreground"}`}>
+                <Link href={item.href} className="hover:text-rc-primary underline-offset-2 hover:underline">
                   {item.name}
                 </Link>
               ) : (
-                <span aria-current="page" className={dark ? "text-white" : "text-foreground"}>
+                <span aria-current="page" className="text-rc-heading font-medium">
                   {item.name}
                 </span>
               )}

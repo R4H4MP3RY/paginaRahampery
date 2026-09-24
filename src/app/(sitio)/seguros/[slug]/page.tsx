@@ -5,11 +5,24 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { CheckmarkCircle02Icon, InformationCircleIcon, WhatsappIcon } from "@hugeicons/core-free-icons";
 import { JsonLd } from "@/components/json-ld";
 import { QuoteForm } from "@/components/quote-form";
-import { Breadcrumbs, CtaBand, FaqList, InsurersStrip, SectionHeading } from "@/components/sections";
+import {
+  Breadcrumbs,
+  CtaBand,
+  FaqList,
+  Hero,
+  IconTile,
+  InsurersStrip,
+  Section,
+  SectionHeading,
+  cardCls,
+  cardHoverCls,
+  container,
+} from "@/components/sections";
 import { buttonVariants } from "@/components/ui/button";
 import { getInsurancePage, insurancePages } from "@/content/seguros";
 import { fallbackInsuranceIcon, insuranceIcons } from "@/lib/insurance-icons";
 import { insuranceCategories, offeredInsurances, site, whatsappUrl } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export const dynamicParams = false;
 
@@ -56,16 +69,16 @@ export default async function InsurancePage({ params }: PageProps<"/seguros/[slu
         }}
       />
 
-      <section className="bg-secondary">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-12 sm:px-6 md:py-16">
+      <Hero>
+        <div className="grid gap-6">
           <Breadcrumbs items={[{ name: "Seguros", href: "/seguros" }, { name: insurance.name, href: `/seguros/${slug}` }]} />
-          <div className="flex items-start gap-4">
-            <span className="text-brand-blue hidden size-14 shrink-0 items-center justify-center rounded-2xl bg-white sm:flex">
-              <HugeiconsIcon icon={insuranceIcons[slug] ?? fallbackInsuranceIcon} size={30} />
+          <div className="flex items-start gap-5">
+            <span className="hidden sm:block">
+              <IconTile icon={insuranceIcons[slug] ?? fallbackInsuranceIcon} />
             </span>
             <SectionHeading as="h1" eyebrow={insuranceCategories[insurance.category]} title={page.h1} text={page.intro} />
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-wrap gap-3">
             <a href="#cotizar" className={buttonVariants({ size: "xl" })}>
               Cotizar gratis
             </a>
@@ -73,61 +86,66 @@ export default async function InsurancePage({ params }: PageProps<"/seguros/[slu
               href={whatsappUrl(quoteMessage)}
               target="_blank"
               rel="noopener noreferrer"
-              className={buttonVariants({ variant: "whatsapp", size: "xl" })}
+              className={buttonVariants({ variant: "outline", size: "xl" })}
             >
               <HugeiconsIcon icon={WhatsappIcon} />
               Pregúntame por WhatsApp
             </a>
           </div>
         </div>
-      </section>
+      </Hero>
 
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_26rem]">
-        <div className="grid content-start gap-12">
-          <ContentList title="¿Para quién es?" items={page.forWhom} />
-          <ContentList title="¿Qué cubre?" items={page.covers} />
-          <ContentList title="Qué debes considerar" items={page.considerations} />
+      <Section>
+        <div className={cn(container, "grid gap-12 lg:grid-cols-[1fr_26rem]")}>
+          <div className="grid content-start gap-12">
+            <ContentList title="¿Para quién es?" items={page.forWhom} />
+            <ContentList title="¿Qué cubre?" items={page.covers} />
+            <ContentList title="Qué debes considerar" items={page.considerations} />
 
-          <section className="grid gap-4">
-            <h2 className="text-2xl font-semibold">Preguntas frecuentes</h2>
-            <FaqList faqs={page.faqs} />
-          </section>
+            <section className="grid gap-5">
+              <h2 className="text-rc-xl">Preguntas frecuentes</h2>
+              <FaqList faqs={page.faqs} />
+            </section>
 
-          <p className="text-muted-foreground flex gap-2 text-sm">
-            <HugeiconsIcon icon={InformationCircleIcon} size={18} className="mt-0.5 shrink-0" />
-            Información general con fines educativos. Las coberturas, exclusiones, periodos de espera y condiciones
-            dependen de cada aseguradora y se detallan en las condiciones generales de la póliza.
-          </p>
-        </div>
-
-        <aside id="cotizar" className="lg:sticky lg:top-24 lg:self-start">
-          <div className="bg-card rounded-2xl border p-6 shadow-sm">
-            <h2 className="mb-1 text-xl font-semibold">Solicita tu cotización</h2>
-            <p className="text-muted-foreground mb-6 text-sm">
-              {insurance.name}: gratis y sin compromiso. Te respondo con opciones.
+            {/* .rc-note */}
+            <p className="bg-rc-info-soft text-rc-sm text-rc-text flex gap-3 rounded-xl px-5 py-4">
+              <HugeiconsIcon icon={InformationCircleIcon} size={22} className="text-rc-primary mt-0.5 shrink-0" />
+              Información general con fines educativos. Las coberturas, exclusiones, periodos de espera y condiciones
+              dependen de cada aseguradora y se detallan en las condiciones generales de la póliza.
             </p>
-            <QuoteForm defaultInsurance={slug} />
           </div>
-        </aside>
-      </div>
+
+          <aside id="cotizar" className="lg:sticky lg:top-28 lg:self-start">
+            <div className={cn(cardCls, "shadow-rc-2 gap-1")}>
+              <h2 className="text-rc-xl">Solicita tu cotización</h2>
+              <p className="text-rc-sm text-rc-muted mb-5">
+                {insurance.name}: gratis y sin compromiso. Te respondo con opciones.
+              </p>
+              <QuoteForm defaultInsurance={slug} />
+            </div>
+          </aside>
+        </div>
+      </Section>
 
       {related.length > 0 && (
-        <section className="mx-auto grid max-w-6xl gap-4 px-4 pb-16 sm:px-6">
-          <h2 className="text-xl font-semibold">También te puede interesar</h2>
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {related.map((r) => (
-              <li key={r.slug}>
-                <Link
-                  href={`/seguros/${r.slug}`}
-                  className="hover:border-brand-blue flex items-center gap-3 rounded-xl border p-4 font-medium transition-colors"
-                >
-                  <HugeiconsIcon icon={insuranceIcons[r.slug] ?? fallbackInsuranceIcon} size={22} className="text-brand-blue" />
-                  {r.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <Section tint>
+          <div className={cn(container, "grid gap-6")}>
+            <h2 className="text-rc-xl">También te puede interesar</h2>
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {related.map((r) => (
+                <li key={r.slug}>
+                  <Link
+                    href={`/seguros/${r.slug}`}
+                    className={cn(cardCls, cardHoverCls, "text-rc-heading flex-row items-center font-semibold")}
+                  >
+                    <IconTile icon={insuranceIcons[r.slug] ?? fallbackInsuranceIcon} />
+                    {r.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Section>
       )}
 
       <InsurersStrip />
@@ -142,13 +160,13 @@ export default async function InsurancePage({ params }: PageProps<"/seguros/[slu
 
 function ContentList({ title, items }: { title: string; items: string[] }) {
   return (
-    <section className="grid gap-4">
-      <h2 className="text-2xl font-semibold">{title}</h2>
+    <section className="grid gap-5">
+      <h2 className="text-rc-xl">{title}</h2>
       <ul className="grid gap-3">
         {items.map((item) => (
-          <li key={item} className="flex gap-3 text-lg">
-            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={22} className="text-brand-green mt-1 shrink-0" />
-            <span className="text-muted-foreground">{item}</span>
+          <li key={item} className="flex gap-3">
+            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={22} className="text-rc-money mt-0.5 shrink-0" />
+            <span className="text-rc-text">{item}</span>
           </li>
         ))}
       </ul>

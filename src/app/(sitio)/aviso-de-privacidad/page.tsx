@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Breadcrumbs, Hero } from "@/components/sections";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -11,11 +12,15 @@ export const metadata: Metadata = {
 // Actualizar el domicilio en site.ts cuando haya oficina.
 export default function AvisoDePrivacidad() {
   return (
-    <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-16 sm:px-6">
-      <article className="grid gap-6 text-sm leading-relaxed [&_h2]:text-lg [&_h2]:font-semibold [&_ul]:list-disc [&_ul]:pl-5">
-        <h1 className="text-3xl font-semibold">Aviso de privacidad integral</h1>
-
-        <section className="grid gap-2">
+    <>
+      <Hero>
+        <div className="mx-auto grid max-w-3xl gap-6">
+          <Breadcrumbs items={[{ name: "Aviso de privacidad", href: "/aviso-de-privacidad" }]} />
+          <h1>Aviso de privacidad integral</h1>
+        </div>
+      </Hero>
+      <article className="prose prose-rc mx-auto w-full max-w-3xl px-6 pb-16">
+        <section>
           <h2>Responsable</h2>
           <p>
             {site.legalName} (“{site.name}”), con domicilio en {site.privacyAddress}, es responsable del tratamiento de tus datos personales conforme a la Ley
@@ -23,20 +28,23 @@ export default function AvisoDePrivacidad() {
           </p>
         </section>
 
-        <section className="grid gap-2">
+        <section>
           <h2>Datos que recabamos</h2>
           <ul>
-            <li>Identificación y contacto: nombre, correo electrónico, teléfono y ciudad.</li>
-            <li>Información que decidas compartir en tu mensaje sobre el seguro o servicio que te interesa.</li>
+            <li>Identificación y contacto: nombre, correo electrónico, teléfono, ciudad, fecha de nacimiento y sexo.</li>
+            <li>
+              Información que decidas compartir en tu mensaje sobre el seguro que te interesa, por ejemplo: presupuesto,
+              datos de las personas a asegurar, datos de tu auto u hogar, o tu itinerario de viaje.
+            </li>
           </ul>
           <p>
-            Para cotizar algunos seguros (por ejemplo, gastos médicos o vida) podríamos necesitar datos de salud, que la
-            ley considera <strong>datos sensibles</strong>. Solo los solicitaremos cuando sean necesarios y con tu
-            consentimiento expreso.
+            Para cotizar algunos seguros (por ejemplo, gastos médicos o vida) podríamos necesitar datos de salud (por ejemplo, si
+            fumas), que la ley considera <strong>datos sensibles</strong>. Solo los tratamos con tu consentimiento expreso,
+            que otorgas al marcar la casilla del formulario de cotización.
           </p>
         </section>
 
-        <section className="grid gap-2">
+        <section>
           <h2>Finalidades</h2>
           <p>Finalidades necesarias:</p>
           <ul>
@@ -50,7 +58,7 @@ export default function AvisoDePrivacidad() {
           </ul>
         </section>
 
-        <section className="grid gap-2">
+        <section>
           <h2>Transferencias</h2>
           <p>
             Tus datos podrán compartirse con las aseguradoras necesarias para cotizar o emitir tu póliza. No vendemos ni
@@ -58,12 +66,12 @@ export default function AvisoDePrivacidad() {
           </p>
         </section>
 
-        <section className="grid gap-2">
+        <section>
           <h2>Derechos ARCO y revocación del consentimiento</h2>
           <p>
             Puedes acceder, rectificar, cancelar u oponerte al tratamiento de tus datos, así como revocar tu
             consentimiento, enviando una solicitud a{" "}
-            <a href={`mailto:${site.legalEmail}`} className="underline">
+            <a href={`mailto:${site.legalEmail}`}>
               {site.legalEmail}
             </a>{" "}
             con tu nombre, el derecho que deseas ejercer y una copia de tu identificación. Responderemos en los plazos
@@ -71,7 +79,7 @@ export default function AvisoDePrivacidad() {
           </p>
         </section>
 
-        <section className="grid gap-2">
+        <section>
           <h2>Cookies y tecnologías similares</h2>
           <p>
             Este sitio usa únicamente las cookies necesarias para su funcionamiento y para protegerlo contra spam
@@ -84,11 +92,11 @@ export default function AvisoDePrivacidad() {
           </p>
         </section>
 
-        <section className="grid gap-2">
+        <section>
           <h2>Cambios al aviso</h2>
           <p>Cualquier cambio a este aviso se publicará en esta página. Última actualización: septiembre de 2026.</p>
         </section>
       </article>
-  </div>
-);
+    </>
+  );
 }

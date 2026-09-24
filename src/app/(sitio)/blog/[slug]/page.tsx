@@ -3,9 +3,10 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/json-ld";
 import { PostCard } from "@/components/post-card";
-import { Breadcrumbs, CtaBand } from "@/components/sections";
+import { Breadcrumbs, Chip, CtaBand, Section, container } from "@/components/sections";
 import { blogDateFmt, getPostBySlug, getPublishedPosts } from "@/lib/blog";
 import { legalDisclaimer, site } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export const revalidate = 3600;
 
@@ -64,44 +65,55 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
       />
 
       <article>
-        <header className="mx-auto grid max-w-3xl gap-5 px-4 pt-12 sm:px-6 md:pt-16">
-          <Breadcrumbs items={[{ name: "Blog", href: "/blog" }, { name: post.title, href: `/blog/${slug}` }]} />
-          <p className="text-muted-foreground text-sm">
-            {post.category && <span className="text-brand-orange-ink font-semibold">{post.category} · </span>}
-            <time dateTime={post.publishedAt}>{blogDateFmt.format(new Date(post.publishedAt))}</time> · Por {site.name}
-          </p>
-          <h1 className="text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-5xl">{post.title}</h1>
-          {post.excerpt && <p className="text-muted-foreground text-xl text-pretty">{post.excerpt}</p>}
+        <header className="from-rc-surface to-rc-bg bg-linear-to-b pt-16 pb-10">
+          <div className="mx-auto grid w-full max-w-3xl gap-5 px-6">
+            <Breadcrumbs items={[{ name: "Blog", href: "/blog" }, { name: post.title, href: `/blog/${slug}` }]} />
+            <p className="text-rc-sm text-rc-muted flex flex-wrap items-center gap-2">
+              {post.category && <Chip>{post.category}</Chip>}
+              <time dateTime={post.publishedAt}>{blogDateFmt.format(new Date(post.publishedAt))}</time>
+              <span aria-hidden="true">·</span>
+              <span>Por {site.name}</span>
+            </p>
+            <h1>{post.title}</h1>
+            {post.excerpt && <p className="text-rc-lg text-rc-muted leading-relaxed text-pretty">{post.excerpt}</p>}
+          </div>
         </header>
 
         {post.coverUrl && (
-          <div className="mx-auto mt-10 max-w-5xl px-4 sm:px-6">
-            <div className="bg-secondary relative aspect-[1.91/1] overflow-hidden rounded-2xl">
-              <Image src={post.coverUrl} alt={post.coverAlt ?? ""} fill priority sizes="(min-width: 1024px) 64rem, 100vw" className="object-cover" />
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="bg-rc-surface-2 shadow-rc-2 relative aspect-[1.91/1] overflow-hidden rounded-cta">
+              <Image
+                src={post.coverUrl}
+                alt={post.coverAlt ?? ""}
+                fill
+                priority
+                sizes="(min-width: 1024px) 64rem, 100vw"
+                className="object-cover"
+              />
             </div>
           </div>
         )}
 
         {/* HTML sanitizado en el servidor al guardar (ver src/lib/editor/render.ts). */}
         <div
-          className="prose prose-lg prose-slate prose-a:text-brand-blue prose-headings:tracking-tight prose-img:rounded-xl mx-auto max-w-3xl px-4 py-12 sm:px-6"
+          className="prose prose-lg prose-rc mx-auto max-w-3xl px-6 py-12"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
 
-        <p className="text-muted-foreground mx-auto max-w-3xl px-4 pb-12 text-xs sm:px-6">{legalDisclaimer}</p>
+        <p className="text-rc-xs text-rc-muted mx-auto max-w-3xl px-6 pb-12">{legalDisclaimer}</p>
       </article>
 
       {more.length > 0 && (
-        <section className="bg-muted">
-          <div className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:px-6">
-            <h2 className="text-2xl font-semibold">Sigue leyendo</h2>
+        <Section tint>
+          <div className={cn(container, "grid gap-8")}>
+            <h2>Sigue leyendo</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {more.map((p) => (
                 <PostCard key={p.slug} post={p} />
               ))}
             </div>
           </div>
-        </section>
+        </Section>
       )}
 
       <CtaBand />

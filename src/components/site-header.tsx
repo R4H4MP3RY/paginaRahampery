@@ -1,11 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { WhatsappIcon } from "@hugeicons/core-free-icons";
+import { Calendar03Icon } from "@hugeicons/core-free-icons";
+import { Isotipo } from "@/components/logo";
 import { MobileMenu } from "@/components/mobile-menu";
+import { NavLinks } from "@/components/nav-links";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { site, whatsappUrl } from "@/lib/site";
-import logo from "../../public/brand/logo.png";
 
 const nav = [
   { href: "/servicios/finanzas-personales", label: "Para ti" },
@@ -15,33 +16,29 @@ const nav = [
   { href: "/#sobre-mi", label: "Sobre mí" },
 ];
 
+// Navegación de rc-brand.css (sección 6): fondo translúcido con desenfoque y enlaces en píldora.
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href="/" aria-label={`${site.name}, inicio`} className="shrink-0">
-          <Image src={logo} alt={`${site.name} Coach Financiero`} priority className="h-14 w-auto sm:h-16" />
+    <header className="border-rc-line sticky top-0 z-40 border-b bg-[color-mix(in_srgb,var(--rc-bg)_88%,transparent)] backdrop-blur-[10px]">
+      <div className="mx-auto flex min-h-[76px] max-w-[1160px] items-center justify-between gap-5 px-6 py-2">
+        <Link href="/" aria-label={`${site.name}, inicio`} className="shrink-0 rounded-lg">
+          {/* Isotipo solo: el nombre ya aparece en el pie y en el contenido (Manual, sección 03). */}
+          <Isotipo priority className="h-12" />
         </Link>
 
-        <nav aria-label="Principal" className="hidden items-center gap-7 text-sm font-medium lg:flex">
-          {nav.map((item) => (
-            <Link key={item.href} href={item.href} className="hover:text-brand-blue transition-colors">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <NavLinks items={nav} className="hidden lg:flex" />
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <ThemeToggle />
           <a
             href={whatsappUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className={buttonVariants({ variant: "whatsapp", size: "xl", className: "hidden h-10 px-4 text-sm sm:inline-flex" })}
+            className={buttonVariants({ variant: "accent", size: "sm", className: "hidden sm:inline-flex" })}
           >
-            <HugeiconsIcon icon={WhatsappIcon} />
+            <HugeiconsIcon icon={Calendar03Icon} />
             Agenda tu cita
           </a>
-
           <MobileMenu items={nav} />
         </div>
       </div>

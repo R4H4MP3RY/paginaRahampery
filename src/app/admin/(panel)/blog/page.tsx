@@ -28,13 +28,13 @@ export default async function AdminBlogPage() {
 
       {error && <p className="text-destructive">No se pudieron cargar los artículos.</p>}
       {!error && posts.length === 0 && (
-        <p className="text-muted-foreground rounded-xl border bg-white p-8 text-center">
+        <p className="text-muted-foreground rounded-xl border bg-rc-elevated p-8 text-center">
           Aún no hay artículos. Crea el primero con el botón “Nuevo artículo”.
         </p>
       )}
 
       {posts.length > 0 && (
-        <ul className="divide-y rounded-xl border bg-white">
+        <ul className="divide-y rounded-xl border bg-rc-elevated">
           {posts.map((p) => (
             <li key={p.id}>
               <Link href={`/admin/blog/${p.id}`} className="hover:bg-muted/60 flex flex-wrap items-center justify-between gap-3 px-5 py-4">
@@ -47,8 +47,8 @@ export default async function AdminBlogPage() {
                 <span
                   className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
                     p.status === "publicado"
-                      ? "bg-brand-green-light/15 text-brand-green-ink"
-                      : "bg-brand-orange/15 text-brand-orange-ink"
+                      ? "bg-rc-money-soft text-rc-money"
+                      : "bg-rc-energy-soft text-rc-energy-text"
                   }`}
                 >
                   {p.status === "publicado" ? "Publicado" : "Borrador"}

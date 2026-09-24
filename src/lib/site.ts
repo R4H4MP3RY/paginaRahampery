@@ -105,19 +105,33 @@ export type Insurance = {
   category: InsuranceCategory;
   // true = no se muestra ni se acepta en el formulario hasta confirmar la cédula necesaria.
   hidden?: boolean;
+  // Texto de ayuda (placeholder) del campo "Describe lo que necesitas" del formulario.
+  quoteHint?: string;
+};
+
+// Qué información necesito para cotizar cada tipo de seguro.
+const hints = {
+  vidaRetiro:
+    "Por favor compárteme el monto de dinero aproximado que puedes destinar para este producto financiero, si eres una persona que fuma y lo que gustes agregar.",
+  salud:
+    "Por favor indícame si vas a estar solo en la póliza o si hay más personas; de cada una, escribe su nombre completo, fecha de nacimiento y parentesco, y lo que gustes agregar.",
+  viajero: "Por favor escribe tu itinerario, fechas y lugares a visitar, y lo que quieras agregar.",
+  auto: "Por favor indícame el código postal de donde vives actualmente y la marca, modelo y versión que vienen en la factura de tu auto o en la carátula de tu póliza actual, y lo que gustes agregar.",
+  hogar:
+    "Por favor compárteme la dirección del hogar que deseas asegurar, el número de pisos que tiene y si eres dueño o rentas.",
 };
 
 // Cada seguro tendrá su propia página (/seguros/[slug]) para posicionar su palabra clave.
 export const insurances: Insurance[] = [
-  { slug: "seguro-de-vida", name: "Seguro de vida", keyword: "seguro de vida", category: "salud" },
-  { slug: "gastos-medicos-mayores", name: "Gastos médicos mayores", keyword: "seguro de gastos médicos mayores", category: "salud" },
-  { slug: "gastos-medicos-menores", name: "Gastos médicos menores", keyword: "seguro de gastos médicos menores", category: "salud" },
-  { slug: "accidentes-personales", name: "Accidentes personales", keyword: "seguro de accidentes personales", category: "salud" },
-  { slug: "seguro-de-viajero", name: "Seguro de viajero", keyword: "seguro de viajero", category: "salud" },
-  { slug: "seguro-de-auto", name: "Seguro de auto", keyword: "seguro de auto", category: "patrimonio" },
-  { slug: "seguro-de-hogar", name: "Seguro de hogar", keyword: "seguro de hogar", category: "patrimonio" },
-  { slug: "plan-personal-de-retiro", name: "Plan Personal de Retiro (PPR)", keyword: "PPR plan personal de retiro", category: "retiro" },
-  { slug: "ahorro-para-el-retiro", name: "Planes de ahorro para el retiro", keyword: "ahorro para el retiro", category: "retiro" },
+  { slug: "seguro-de-vida", name: "Seguro de vida", keyword: "seguro de vida", category: "salud", quoteHint: hints.vidaRetiro },
+  { slug: "gastos-medicos-mayores", name: "Gastos médicos mayores", keyword: "seguro de gastos médicos mayores", category: "salud", quoteHint: hints.salud },
+  { slug: "gastos-medicos-menores", name: "Gastos médicos menores", keyword: "seguro de gastos médicos menores", category: "salud", quoteHint: hints.salud },
+  { slug: "accidentes-personales", name: "Accidentes personales", keyword: "seguro de accidentes personales", category: "salud", quoteHint: hints.salud },
+  { slug: "seguro-de-viajero", name: "Seguro de viajero", keyword: "seguro de viajero", category: "salud", quoteHint: hints.viajero },
+  { slug: "seguro-de-auto", name: "Seguro de auto", keyword: "seguro de auto", category: "patrimonio", quoteHint: hints.auto },
+  { slug: "seguro-de-hogar", name: "Seguro de hogar", keyword: "seguro de hogar", category: "patrimonio", quoteHint: hints.hogar },
+  { slug: "plan-personal-de-retiro", name: "Plan Personal de Retiro (PPR)", keyword: "PPR plan personal de retiro", category: "retiro", quoteHint: hints.vidaRetiro },
+  { slug: "ahorro-para-el-retiro", name: "Planes de ahorro para el retiro", keyword: "ahorro para el retiro", category: "retiro", quoteHint: hints.vidaRetiro },
   // OJO: los riesgos empresariales suelen requerir cédula B. Confirmar con la promotoría
   // si se pueden ofrecer con cédula A (o a través de quién) antes de publicarlos.
   { slug: "seguro-de-negocio", name: "Seguro de negocio", keyword: "seguro para negocio", category: "empresa", hidden: true },
