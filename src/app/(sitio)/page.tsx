@@ -48,33 +48,33 @@ const benefits = [
     icon: Target01Icon,
     tone: "energy" as const,
     title: "Un plan a tu medida",
-    text: "Tus metas, sueños y objetivos convertidos en un plan financiero de acuerdo con tus necesidades y posibilidades.",
+    text: "Creamos un plan financiero de acuerdo con tus necesidades y posibilidades para cumplir tus metas, sueños y objetivos.",
   },
   {
     icon: ChartIncreaseIcon,
     tone: "money" as const,
-    title: "Tu dinero crece",
-    text: "Mejor estructura, más enfoque y un aumento real en tu ahorro y patrimonio, sin dejar de disfrutar tu vida.",
+    title: "Tu dinero creciendo",
+    text: "Creando una estructura, teniendo nuevos hábitos y para tener un aumento real en tu patrimonio, sin dejar de disfrutar tu vida.",
   },
   {
     icon: Shield01Icon,
     tone: "info" as const,
-    title: "Tu familia protegida",
-    text: "Cuidamos lo más importante: tú y los tuyos, con la protección adecuada para cada etapa.",
+    title: "Protegiendo lo importante",
+    text: "Cuidamos lo más importante: tú y los tuyos, además de de tus bienes y patrimonio con la protección adecuada para ti y tus metas.",
   },
 ];
 
 const steps = [
   {
-    title: "Escríbeme por WhatsApp",
-    text: "Cuéntame tu situación y agendamos tu cita presencial en la ZMG o en línea desde cualquier parte de México.",
+    title: "Escríbeme por WhatsApp.",
+    text: "Cuéntame más sobre ti y tus finanzas y agendamos tu cita presencial en la ZMG o en línea desde cualquier parte de México.",
   },
   {
-    title: "Medimos tu salud financiera",
+    title: "Medimos tu salud financiera.",
     text: "Revisamos ingresos, gastos, deudas, ahorro y protección para saber exactamente dónde estás parado.",
   },
   {
-    title: "Construimos tu plan y te acompaño",
+    title: "Construimos tu plan y te acompaño.",
     text: "Definimos acciones concretas y les damos seguimiento para que cumplas tus metas.",
   },
 ];
@@ -86,23 +86,23 @@ const faqs = [
   },
   {
     q: "¿Cuánto cuesta cotizar un seguro?",
-    a: "La cotización es gratuita. Si además quieres una consultoría para revisar las pólizas que ya tienes y comparar opciones, tiene un costo de $350 MXN por hora.",
+    a: "La cotización es gratuita. Si además quieres una consultoría para revisar tu salud financiera y comparar opciones, tiene un costo de $350 MXN por hora.",
   },
   {
     q: "¿Qué incluye el plan financiero personal?",
-    a: "Trabajamos juntos durante 12 meses con sesiones trimestrales para medir tu salud financiera y actualizar tu plan. Cuesta $200 MXN al mes o $2,000 MXN al año.",
+    a: "Trabajamos juntos durante 12 meses con sesiones trimestrales para medir tu salud financiera y actualizar tu plan, además de contacto directo para resolver dudas sobre opciones de herramientas financieras nuevas o que ya estes utilizando. Cuesta $200 MXN al mes o $2,000 MXN al año.",
   },
   {
     q: "¿Trabajas con empresas?",
-    a: "Sí. Acompaño a dueños de MIPyMES a revisar su información financiera, su modelo de negocio y su estructura, con sesiones cuando las necesites y sin plazo mínimo de contratación.",
+    a: "Sí. Acompaño a dueños de MIPyMES a revisar su información financiera, su modelo de negocio y su estructura, con sesiones cuando las necesiten y sin plazo mínimo de contratación.",
   },
   {
     q: "¿Me dices en qué invertir?",
-    a: "Te enseño cómo funcionan las distintas opciones de inversión para que tomes decisiones informadas. No doy recomendaciones personalizadas de compra o venta de valores. Como agente de seguros sí puedo asesorarte en planes de retiro y ahorro con aseguradoras.",
+    a: "Te enseño cómo funcionan las distintas opciones de inversión para que tomes decisiones informadas. Por el momento no puedo dar recomendaciones personalizadas de compra o venta de valores. Como agente de seguros sí puedo asesorarte en planes de retiro y ahorro con aseguradoras.",
   },
   {
     q: "¿Emites factura?",
-    a: "Sí, facturo las consultorías y los planes financieros. Las pólizas de seguro las factura directamente la aseguradora.",
+    a: "Sí, facturo las consultorías y los planes financieros.",
   },
 ];
 
@@ -129,10 +129,10 @@ export default async function Home() {
               Coach financiero · Zapopan y todo México
             </p>
             <h1>
-              Tu dinero, protegido y creciendo, de la mano de <span className="text-rc-primary">tu coach financiero</span>
+              Tu dinero protegido y creciendo, de la mano de <span className="text-rc-primary">tu coach financiero</span>
             </h1>
             <p className="text-rc-lg text-rc-muted max-w-[60ch] leading-relaxed">
-              Soy {site.name}. Te ayudo a aprovechar, proteger y hacer crecer tu dinero con educación financiera real y
+              Soy {site.name}. Te ayudo a que aprendas como aprovechar, proteger y hacer crecer tu dinero con educación financiera real y
               un plan hecho a tu medida, sin dejar de disfrutar tu vida.
             </p>
             <div className="mt-2 flex flex-wrap gap-3">
@@ -150,7 +150,7 @@ export default async function Home() {
               </a>
             </div>
             <ul className="text-rc-sm text-rc-muted flex flex-wrap gap-x-6 gap-y-2">
-              {["Desde 2020", `Agente de seguros · Cédula CNSF ${site.cnsf.cedula}`, "Presencial y en línea"].map(
+              {["Desde 2020", `Agente de seguros · Cédula CNSF ${site.cnsf.cedula}`, "Presencial y en línea", "Experiencia de más de 15 años"].map(
                 (t) => (
                   <li key={t} className="inline-flex items-center gap-2">
                     <HugeiconsIcon icon={CheckmarkCircle02Icon} size={20} className="text-rc-money" />
@@ -187,7 +187,7 @@ export default async function Home() {
         <div className={cn(container, "grid gap-10")}>
           <SectionHeading
             eyebrow="¿Por qué un coach financiero?"
-            title="Nadie nos enseñó a manejar el dinero. Aquí aprendes con acompañamiento real."
+            title="Nadie nos enseñó a manejar el dinero. Aquí aprendes con compañía profesional."
           />
           <ul className="grid gap-6 md:grid-cols-3">
             {benefits.map((b) => (
@@ -241,9 +241,9 @@ export default async function Home() {
         <div className={cn(container, "grid gap-12 lg:grid-cols-[1fr_1.05fr]")}>
           <div className="grid content-start gap-8">
             <SectionHeading
-              eyebrow="Seguros y retiro"
-              title="Protege a tu familia y tu patrimonio"
-              text="Te ayudo a elegir la protección adecuada y a preparar tu retiro. La cotización es gratuita."
+              eyebrow="Seguros, ahorros y retiro."
+              title="Protege a los que quieres, a ti y tu patrimonio"
+              text="Te ayudo a elegir la protección adecuada, empezar a ahorrar y a preparar tu retiro. La cotización es gratuita."
             />
             <div className="grid gap-4 sm:grid-cols-2">
               {categories.map((c) => (
@@ -299,14 +299,15 @@ export default async function Home() {
               <p>
                 Desde los 12 años el dinero, el ahorro y las inversiones han sido parte de mi vida. Mis papás me llevaban a
                 ahorrar a mi cuenta de banco y me dejaban escuchar lo que les explicaban de sus inversiones. Ahí empezó
-                todo: investigar, invertir, emprender pequeños negocios y, con el tiempo, aprender también a perder dinero
-                en inversiones de alto riesgo.
+                todo: investigar, invertir, emprender pequeños negocios y con el tiempo, aprender también sobre los riesgos que hay
+                en el mundo financiero.
               </p>
               <p>
                 A lo largo de los años escuché las preocupaciones de muchas personas: no saber ahorrar, no saber invertir,
                 no tener un seguro que las proteja, caer en fraudes. Por eso, en{" "}
                 <strong className="text-rc-text">marzo de 2020</strong> nació esta marca: para promover la educación
-                financiera y ayudarte a aprovechar, proteger y hacer crecer tu dinero.
+                financiera y ayudarte a aprovechar, proteger y hacer crecer tu dinero y no tengas que hacerlo solo y más en este mundo
+                con tanta información que puede ser confusa o engañosa.
               </p>
             </div>
           </div>
