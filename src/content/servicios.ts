@@ -16,6 +16,8 @@ export type ServicePage = {
   process: string[];
   faqs: Faq[];
   whatsappMessage: string;
+  // Título de la sección de precios; si no se indica, se usa "Elige cómo quieres empezar".
+  pricesTitle?: string;
 };
 
 export const servicePages: ServicePage[] = [
@@ -30,7 +32,7 @@ export const servicePages: ServicePage[] = [
       "Coaching de finanzas personales: mide tu salud financiera, sal de deudas, ahorra e invierte con un plan a tu medida. Consultoría desde $350 MXN. Presencial en la ZMG y en línea.",
     intro:
       "Nadie nos enseñó a manejar el dinero en la escuela. Te acompaño a entender tus finanzas, ordenar tus gastos y construir un plan realista para cumplir tus metas, sueños y objetivos sin dejar de disfrutar tu vida.",
-    problemsTitle: "Te ayudo a…",
+    problemsTitle: "Te ayudo a.",
     problems: [
       { title: "Salir de deudas", text: "Ordenamos tus deudas y creamos una estrategia para liquidarlas sin ahogarte." },
       { title: "Ahorrar de verdad", text: "Definimos cuánto, para qué y cómo ahorrar, empezando por tu fondo de emergencia." },
@@ -50,15 +52,15 @@ export const servicePages: ServicePage[] = [
     faqs: [
       {
         q: "¿Necesito ganar mucho para tener un plan financiero?",
-        a: "No. Un plan financiero sirve precisamente para aprovechar mejor lo que ganas hoy, sea poco o mucho.",
+        a: "No. Un plan financiero sirve precisamente para aprovechar mejor lo que ganas hoy, sin importar la cantidad que sea.",
       },
       {
         q: "¿Cuál es la diferencia entre la consultoría y el plan financiero?",
-        a: "La consultoría es una sesión de una hora para revisar un tema o hacer tu diagnóstico. El plan financiero es un acompañamiento de 12 meses con sesiones trimestrales para dar seguimiento y ajustar tu plan.",
+        a: "La consultoría es una sesión por hora para revisar un tema o hacer tu diagnóstico y generar cambios en tu salud financiera. El plan financiero es un acompañamiento de 12 meses con sesiones trimestrales para dar seguimiento y ajustar tu plan.",
       },
       {
         q: "¿Me dices en qué invertir?",
-        a: "Te enseño cómo funcionan las distintas opciones de inversión, sus riesgos y costos, para que decidas con información. No doy recomendaciones personalizadas de compra o venta de valores.",
+        a: "Te enseño cómo funcionan las distintas opciones de inversión, sus riesgos y costos, para que decidas con información.",
       },
       {
         q: "¿Las sesiones son en línea?",
@@ -70,6 +72,7 @@ export const servicePages: ServicePage[] = [
   {
     slug: "finanzas-para-empresas",
     audience: "empresas",
+    pricesTitle: "Elige comenzar ahora.",
     navLabel: "Empresas",
     eyebrow: "Consultoría para MIPyMES",
     h1: "Finanzas claras para que tu negocio crezca",
@@ -81,7 +84,7 @@ export const servicePages: ServicePage[] = [
     problemsTitle: "Trabajamos en…",
     problems: [
       { title: "Tu información financiera", text: "Ingresos, costos, márgenes y flujo de efectivo explicados en claro." },
-      { title: "Tu modelo de negocio", text: "Revisamos cómo generas valor y dinero, y dónde hay oportunidades de mejora." },
+      { title: "Tu modelo de negocio", text: "Revisamos cómo generas valor y dinero y dónde hay oportunidades de mejora." },
       { title: "La estructura de tu empresa", text: "Roles, procesos y organización para que el negocio no dependa solo de ti." },
       { title: "Separar lo personal del negocio", text: "Definimos tu sueldo como dueño y dejamos de mezclar las cuentas." },
       { title: "Metas y crecimiento", text: "Establecemos metas medibles y un plan de acción para alcanzarlas." },

@@ -107,8 +107,9 @@ export default async function ServicePage({ params }: PageProps<"/servicios/[slu
 
       <Section id="precios" tint>
         <div className={cn(container, "grid gap-10")}>
-          <SectionHeading eyebrow="Precios" title="Elige cómo quieres empezar" />
-          <ul className="grid gap-6 md:grid-cols-2">
+          <SectionHeading eyebrow="Precios" title={page.pricesTitle ?? "Elige cómo quieres empezar"} />
+          {/* Con un solo servicio, la tarjeta no ocupa media fila: toma un ancho cómodo de lectura. */}
+          <ul className={cn("grid gap-6", offers.length > 1 ? "md:grid-cols-2" : "max-w-2xl")}>
             {offers.map((s) => (
               <li key={s.slug} className={cn(cardCls, "gap-4 p-8")}>
                 <h3 className="text-rc-xl">{s.name}</h3>

@@ -98,7 +98,7 @@ const faqs = [
   },
   {
     q: "¿Me dices en qué invertir?",
-    a: "Te enseño cómo funcionan las distintas opciones de inversión para que tomes decisiones informadas. Por el momento no puedo dar recomendaciones personalizadas de compra o venta de valores. Como agente de seguros sí puedo asesorarte en planes de retiro y ahorro con aseguradoras.",
+    a: "Te enseño cómo funcionan las distintas opciones de inversión para que tomes decisiones informadas y enfocadas a las metas que deseas cumplir.",
   },
   {
     q: "¿Emites factura?",
@@ -132,7 +132,7 @@ export default async function Home() {
               Tu dinero protegido y creciendo, de la mano de <span className="text-rc-primary">tu coach financiero</span>
             </h1>
             <p className="text-rc-lg text-rc-muted max-w-[60ch] leading-relaxed">
-              Soy {site.name}. Te ayudo a que aprendas como aprovechar, proteger y hacer crecer tu dinero con educación financiera real y
+              Soy {site.name}. Te ayudo a que aprendas a como aprovechar, proteger y hacer crecer tu dinero con educación financiera real y
               un plan hecho a tu medida, sin dejar de disfrutar tu vida.
             </p>
             <div className="mt-2 flex flex-wrap gap-3">

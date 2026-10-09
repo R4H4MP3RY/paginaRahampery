@@ -80,13 +80,6 @@ export const services: Service[] = [
     summary:
       "Revisamos la información financiera, el modelo de negocio y la estructura de tu empresa para definir metas y cambios a implementar.",
   },
-  {
-    slug: "plan-financiero-empresarial",
-    name: "Plan financiero empresarial",
-    audience: "empresas",
-    price: "$350 MXN por hora · 2 a 3 sesiones al mes",
-    summary: "Acompañamiento continuo para tu negocio, sin plazo mínimo de contratación.",
-  },
 ];
 
 export type InsuranceCategory = "salud" | "patrimonio" | "retiro" | "empresa";
@@ -141,16 +134,17 @@ export const insurances: Insurance[] = [
 // Solo nombres en texto: usar logotipos requiere autorización de cada aseguradora.
 export const insurers = [
   "MetLife",
+  "Seguros El Potosí",
   "Allianz",
   "AXA",
   "Chubb",
   "Zurich",
   "Quálitas",
   "Seguros Banorte",
-  "Seguros El Potosí",
   "Seguros Afirme",
   "ANA Seguros",
   "General de Seguros",
+  "Sura"
 ];
 
 export const offeredInsurances = insurances.filter((i) => !i.hidden);

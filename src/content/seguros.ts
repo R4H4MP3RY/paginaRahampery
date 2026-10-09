@@ -23,12 +23,12 @@ export const insurancePages: InsurancePage[] = [
     metaDescription:
       "Cotiza tu seguro de vida con un agente certificado por la CNSF. Te ayudo a calcular la suma asegurada que tu familia necesita. Asesoría en Zapopan y en línea.",
     intro:
-      "Un seguro de vida garantiza que las personas que dependen de ti tengan dinero para seguir adelante si tú faltas. Es la base de cualquier plan financiero cuando alguien depende de tus ingresos.",
+      "Un seguro de vida garantiza que las personas que dependen de ti y tú tengan dinero para seguir adelante si tú faltas o si tienes un accidente que te impida seguir haciendo dinero. Es la base de cualquier plan financiero para ti y tus seres queridos.",
     forWhom: [
       "Madres y padres de familia con hijos o dependientes económicos.",
-      "Personas con créditos hipotecarios, automotrices o deudas que no quieren heredar.",
       "Parejas que comparten gastos y quieren proteger el nivel de vida del otro.",
       "Quienes quieren dejar un patrimonio o combinar protección con ahorro.",
+      "Quienes quieren velar por su estilo de vida y nivel económico si ya no puedieran trabajar."
     ],
     covers: [
       "Pago de la suma asegurada a tus beneficiarios en caso de fallecimiento.",
@@ -37,14 +37,14 @@ export const insurancePages: InsurancePage[] = [
     ],
     considerations: [
       "La suma asegurada debe cubrir deudas, gastos de tu familia por varios años y metas como la educación de tus hijos.",
-      "Mientras más joven y sano contrates, menor suele ser la prima.",
+      "Mientras más joven y sano contrates, menor suele ser el costo.",
       "Designa beneficiarios y mantenlos actualizados.",
       "Declara tu estado de salud con veracidad: omitir información puede invalidar la póliza.",
     ],
     faqs: [
       {
         q: "¿Cuánta suma asegurada necesito?",
-        a: "Depende de tus ingresos, deudas y de cuántos años necesitaría tu familia para reorganizarse. En la asesoría lo calculamos juntos con base en tu situación real.",
+        a: "Depende de tus ingresos, deudas y de cuántos años necesitaría tu familia para reorganizarse o tu para seguir disfrutando de tu vida. En la asesoría lo calculamos juntos con base en tu situación real.",
       },
       {
         q: "¿Qué diferencia hay entre un seguro temporal y uno con ahorro?",
@@ -68,18 +68,18 @@ export const insurancePages: InsurancePage[] = [
       "Personas y familias que quieren atención en hospitales privados.",
       "Mujeres que planean un embarazo y quieren cobertura de maternidad.",
       "Profesionistas independientes sin prestaciones médicas de su empleo.",
-      "Quienes tienen seguro de su empresa pero quieren una póliza propia que no dependa de su trabajo.",
+      "Quienes tienen seguro de su empresa pero quieren una póliza propia que no dependa de su trabajo o tener una mayor protección.",
     ],
     covers: [
-      "Hospitalización, cirugías, honorarios médicos y medicamentos durante la hospitalización.",
-      "Estudios de laboratorio y gabinete relacionados con el padecimiento.",
+      "Hospitalización, cirugías, honorarios médicos y medicamentos durante la hospitalización y la recuperación.",
+      "Estudios de laboratorio y gabinete relacionados con el padecimiento o cirugía.",
       "Maternidad y complicaciones del embarazo o del recién nacido, según el plan.",
       "Coberturas opcionales como emergencia en el extranjero o reducción de deducible por accidente.",
     ],
     considerations: [
       "Deducible: la cantidad que pagas antes de que la aseguradora empiece a cubrir.",
       "Coaseguro: el porcentaje que te toca pagar después del deducible, normalmente con un tope.",
-      "Periodos de espera: padecimientos como maternidad suelen cubrirse solo después de cierto tiempo de antigüedad, por eso conviene contratar antes de planear un embarazo.",
+      "Periodos de espera: padecimientos como maternidad suelen cubrirse solo después de 10 meses de antigüedad, por eso conviene contratar antes de planear un embarazo.",
       "Las enfermedades preexistentes normalmente no se cubren, así que es mejor contratar mientras estás sano.",
     ],
     faqs: [
@@ -233,7 +233,7 @@ export const insurancePages: InsurancePage[] = [
       },
       {
         q: "¿Puedo cambiarme de aseguradora antes de que venza mi póliza?",
-        a: "Sí. Revisamos tu póliza actual y, si encontramos una mejor opción, te ayudo con el cambio.",
+        a: "Sí. Revisamos tu póliza actual y si encontramos una mejor opción, te ayudo con el cambio.",
       },
     ],
   },
@@ -253,7 +253,7 @@ export const insurancePages: InsurancePage[] = [
     covers: [
       "Daños a la construcción por incendio, explosión y fenómenos hidrometeorológicos.",
       "Terremoto, según el plan.",
-      "Robo de contenidos, como muebles y aparatos electrónicos.",
+      "Robo de contenidos y bienes personales que llevas contigo, como muebles, aparatos electrónicos, celular, dinero en efectivo.",
       "Responsabilidad civil familiar por daños a terceros.",
       "Rotura de cristales y asistencias en el hogar.",
     ],
@@ -280,11 +280,11 @@ export const insurancePages: InsurancePage[] = [
     metaDescription:
       "Aprende qué es un PPR, cómo funciona su beneficio fiscal y cómo complementa tu AFORE para lograr un retiro digno. Asesoría con agente de seguros certificado.",
     intro:
-      "La pensión de la AFORE por sí sola difícilmente mantendrá tu nivel de vida. Un Plan Personal de Retiro te ayuda a ahorrar a largo plazo para un retiro digno y, además, puede darte un beneficio fiscal cada año.",
+      "La pensión de la AFORE por sí sola difícilmente mantendrá tu nivel de vida. Un Plan Personal de Retiro te ayuda a ahorrar a largo plazo para un retiro digno y además, puede darte un beneficio fiscal cada año.",
     forWhom: [
       "Personas asalariadas o independientes que quieren complementar su AFORE.",
       "Quienes presentan declaración anual y buscan deducciones personales.",
-      "Personas de 25 a 50 años que quieren aprovechar el tiempo a su favor.",
+      "Personas de 18 a 50 años que quieren aprovechar el tiempo a su favor.",
     ],
     covers: [
       "Ahorro de largo plazo para tu retiro.",
@@ -300,7 +300,7 @@ export const insurancePages: InsurancePage[] = [
     faqs: [
       {
         q: "¿El PPR sustituye a mi AFORE?",
-        a: "No, la complementa. La AFORE es obligatoria para trabajadores formales; el PPR es un ahorro voluntario adicional para mejorar tu pensión.",
+        a: "No, la complementa. La AFORE es obligatoria para trabajadores formales; el PPR es un ahorro voluntario adicional para mejorar tu retiro.",
       },
       {
         q: "¿Cuánto debo ahorrar?",
@@ -319,7 +319,7 @@ export const insurancePages: InsurancePage[] = [
     metaDescription:
       "Planes de ahorro con aseguradoras para tu retiro, la educación de tus hijos y otras metas de largo plazo. Ahorro disciplinado con protección incluida.",
     intro:
-      "Ahorrar sin un plan es difícil. Los planes de ahorro con aseguradoras te ayudan a apartar dinero de forma disciplinada para tu retiro, la universidad de tus hijos u otras metas, con protección para tu familia.",
+      "Ahorrar sin un plan es difícil. Los planes de ahorro te ayudan a apartar dinero de forma disciplinada para tu retiro, la universidad de tus hijos u otras metas, con protección para tu familia.",
     forWhom: [
       "Quienes quieren ahorrar de forma constante y automática.",
       "Madres y padres que planean la educación de sus hijos.",
@@ -328,7 +328,7 @@ export const insurancePages: InsurancePage[] = [
     covers: [
       "Ahorro programado a un plazo definido.",
       "Suma asegurada para tus beneficiarios si faltas durante el plazo del plan.",
-      "Planes en pesos, UDIS o dólares, según la aseguradora.",
+      "Planes en pesos o dólares, según la aseguradora.",
     ],
     considerations: [
       "Elige el plazo según tu meta: retiro, educación o patrimonio.",
