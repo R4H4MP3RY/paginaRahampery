@@ -1,4 +1,5 @@
 import "server-only";
+import { sanitizePostHtml } from "@/lib/editor/sanitize";
 import { createPublicClient, publicImageUrl } from "@/lib/supabase/public";
 
 export type PublicPostSummary = {
@@ -75,7 +76,7 @@ export async function getPostBySlug(slug: string): Promise<PublicPost | null> {
     .maybeSingle();
   if (error || !data) return null;
   const r = data as Row;
-  return { ...toSummary(r), contentHtml: r.content_html ?? "", seoTitle: r.seo_title ?? null, seoDescription: r.seo_description ?? null };
+  return { ...toSummary(r), contentHtml: sanitizePostHtml(r.content_html ?? ""), seoTitle: r.seo_title ?? null, seoDescription: r.seo_description ?? null };
 }
 
 export const blogDateFmt = new Intl.DateTimeFormat("es-MX", { dateStyle: "long", timeZone: "America/Mexico_City" });
