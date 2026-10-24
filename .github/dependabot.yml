@@ -19,3 +19,12 @@ updates:
       # Actualizaciones menores y parches juntos en un solo pull request.
       menores:
         update-types: ["minor", "patch"]
+
+  # Acciones usadas en .github/workflows (actualiza también los SHA fijados).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      timezone: "America/Mexico_City"
+    cooldown:
+      default-days: 7

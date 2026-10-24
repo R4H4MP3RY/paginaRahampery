@@ -1,0 +1,51 @@
+# Revisión automática: en cada pull request (por ejemplo, los de Dependabot) y en cada
+# cambio que llega a main, GitHub instala las dependencias, busca vulnerabilidades,
+# revisa el código y compila el sitio. Si algo falla, el pull request se marca en rojo.
+name: Revisión
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Solo lectura: esta revisión no puede modificar el repositorio ni usa secretos.
+permissions:
+  contents: read
+
+# Si llega un cambio nuevo a la misma rama, se cancela la revisión anterior.
+concurrency:
+  group: revision-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  revision:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Valores de ejemplo, no reales: la compilación los exige, pero no se conecta a nada.
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      # Acciones fijadas por SHA (no por etiqueta), para que nadie pueda cambiarlas sin que se note.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Instala pnpm (versión de package.json), Node 24 y las dependencias exactas del lockfile.
+      - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+        with:
+          runtime: node@24
+          require-lockfile: true
+
+      - name: Vulnerabilidades en dependencias de producción
+        run: pnpm audit --prod --audit-level high
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Tipos de TypeScript
+        run: pnpm exec tsc --noEmit
+
+      - name: Compilación
+        run: pnpm build
