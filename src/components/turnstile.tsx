@@ -4,7 +4,10 @@ import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 
 type TurnstileApi = {
-  render: (el: HTMLElement, opts: { sitekey: string; language?: string }) => string;
+  render: (
+    el: HTMLElement,
+    opts: { sitekey: string; language?: string; "error-callback"?: (code: string) => boolean },
+  ) => string;
   reset: (id: string) => void;
   remove: (id: string) => void;
 };
@@ -25,7 +28,13 @@ export function Turnstile() {
 
   useEffect(() => {
     if (!loaded || !siteKey || !ref.current || !window.turnstile) return;
-    const id = window.turnstile.render(ref.current, { sitekey: siteKey, language: "es" });
+    const id = window.turnstile.render(ref.current, {
+      sitekey: siteKey,
+      language: "es",
+      // El propio widget muestra el fallo y permite reintentar; devolver true evita que
+      // Cloudflare lance un error sin manejar en la consola.
+      "error-callback": () => true,
+    });
     // El token es de un solo uso: React reinicia el formulario tras cada envío,
     // así que pedimos un token nuevo en ese momento.
     const form = ref.current.closest("form");
