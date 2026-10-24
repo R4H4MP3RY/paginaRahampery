@@ -1,6 +1,14 @@
 allowBuilds:
   sharp: false
   unrs-resolver: false
+# Fuerza versiones corregidas de dependencias indirectas (auditoría Cyber Neo, oct. 2026).
+overrides:
+  source-map-js: ^1.2.2 # GHSA-68fv-2mgg-jv7q
+peerDependencyRules:
+  allowedVersions:
+    # @tiptap/html declara happy-dom ^20, pero toda la serie 20 es vulnerable
+    # (GHSA-834v-8h66-3h79). Se usa 21.0.4, probada con el render del blog.
+    "@tiptap/html>happy-dom": "21"
 minimumReleaseAgeExclude:
   - '@next/env@16.4.3'
   - '@next/swc-darwin-arm64@16.4.3'
