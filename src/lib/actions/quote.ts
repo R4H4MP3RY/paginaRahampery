@@ -1,5 +1,6 @@
 "use server";
 
+import { createHmac } from "node:crypto";
 import { headers } from "next/headers";
 import { after } from "next/server";
 import { z } from "zod";
@@ -47,6 +48,14 @@ export async function submitQuote(_prev: QuoteFormState, formData: FormData): Pr
 
   const data = parsed.data;
   const supabase = createAdminClient();
+  if (!(await withinRateLimit(supabase, ip, data.email))) {
+    return {
+      ok: false,
+      values,
+      message: "Recibimos varias solicitudes en poco tiempo. Inténtalo más tarde o escríbeme por WhatsApp.",
+    };
+  }
+
   const { error } = await supabase.from("quote_requests").insert({
     full_name: data.fullName,
     email: data.email,
@@ -71,6 +80,35 @@ export async function submitQuote(_prev: QuoteFormState, formData: FormData): Pr
   after(() => notifyNewQuote(data));
 
   return { ok: true, message: "¡Gracias! Recibí tu solicitud y te contactaré muy pronto." };
+}
+
+const MAX_PER_IP_PER_HOUR = 5;
+const MAX_PER_EMAIL_PER_DAY = 3;
+
+// Si la revisión falla por un error de Supabase se deja pasar: es preferible
+// recibir una solicitud de más que perder un cliente real.
+async function withinRateLimit(supabase: ReturnType<typeof createAdminClient>, ip: string | null, email: string) {
+  if (ip) {
+    // HMAC con la secret key: la IP no se puede recuperar a partir del hash.
+    const ipHash = createHmac("sha256", process.env.SUPABASE_SECRET_KEY ?? "").update(ip).digest("hex");
+    const { data, error } = await supabase.rpc("register_quote_attempt", {
+      p_ip_hash: ipHash,
+      p_max: MAX_PER_IP_PER_HOUR,
+      p_window: "1 hour",
+    });
+    if (error) console.error("register_quote_attempt", error.code, error.message);
+    else if (data === false) return false;
+  }
+
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { count, error } = await supabase
+    .from("quote_requests")
+    .select("id", { count: "exact", head: true })
+    // ilike para ignorar mayúsculas; se escapan % y _ para que no actúen como comodines.
+    .ilike("email", email.replace(/[\\%_]/g, "\\$&"))
+    .gte("created_at", since);
+  if (error) console.error("quote rate limit email", error.code, error.message);
+  return (count ?? 0) < MAX_PER_EMAIL_PER_DAY;
 }
 
 async function notifyNewQuote(data: z.infer<typeof quoteSchema>) {
