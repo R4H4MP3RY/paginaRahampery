@@ -36,7 +36,10 @@ function adminCsp(nonce: string) {
 // que el usuario sea administrador (y RLS lo exige en la base de datos).
 export async function proxy(request: NextRequest) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return new NextResponse("Supabase no está configurado.", { status: 503 });
+    return new NextResponse("Supabase no está configurado.", {
+      status: 503,
+      headers: { "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'" },
+    });
   }
 
   const csp = adminCsp(Buffer.from(crypto.randomUUID()).toString("base64"));
@@ -72,7 +75,11 @@ export async function proxy(request: NextRequest) {
   const isLogin = request.nextUrl.pathname === "/admin/login";
 
   if (!data?.claims && !isLogin) {
-    return NextResponse.redirect(new URL("/admin/login", request.url));
+    const redirect = NextResponse.redirect(new URL("/admin/login", request.url));
+    // Conserva las cookies que Supabase haya renovado o borrado (p. ej. una sesión vencida).
+    response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    redirect.headers.set("Content-Security-Policy", csp);
+    return redirect;
   }
   response.headers.set("Content-Security-Policy", csp);
   return response;

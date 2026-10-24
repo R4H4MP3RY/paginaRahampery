@@ -75,7 +75,7 @@ export async function savePost(_prev: PostFormState, formData: FormData): Promis
     if (result.error.code === "23505") {
       return { message: "Ya existe un artículo con esa URL.", errors: { slug: ["Elige otra URL"] } };
     }
-    console.error("save post", result.error);
+    console.error("save post", result.error.code, result.error.message);
     return { message: "No se pudo guardar. Inténtalo de nuevo." };
   }
 

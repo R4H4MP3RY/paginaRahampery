@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { after } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
+import { clientIp } from "@/lib/client-ip";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { ageFrom, quoteSchema, sexOptions, type QuoteFormState } from "@/lib/quote-schema";
@@ -22,7 +23,7 @@ export async function submitQuote(_prev: QuoteFormState, formData: FormData): Pr
   );
 
   const h = await headers();
-  const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
+  const ip = clientIp(h);
   const token = String(formData.get("cf-turnstile-response") ?? "");
   if (!(await verifyTurnstile(token, ip))) {
     return {
@@ -88,9 +89,12 @@ const MAX_PER_EMAIL_PER_DAY = 3;
 // Si la revisión falla por un error de Supabase se deja pasar: es preferible
 // recibir una solicitud de más que perder un cliente real.
 async function withinRateLimit(supabase: ReturnType<typeof createAdminClient>, ip: string | null, email: string) {
-  if (ip) {
-    // HMAC con la secret key: la IP no se puede recuperar a partir del hash.
-    const ipHash = createHmac("sha256", process.env.SUPABASE_SECRET_KEY ?? "").update(ip).digest("hex");
+  // HMAC con una clave propia: la IP no se puede recuperar a partir del hash. Sin la clave
+  // no se calcula (un hash sin clave sí se podría revertir) y solo queda el límite por correo.
+  const hmacKey = process.env.RATE_LIMIT_HMAC_SECRET;
+  if (!hmacKey) console.error("Falta RATE_LIMIT_HMAC_SECRET: límite por IP desactivado");
+  if (ip && hmacKey) {
+    const ipHash = createHmac("sha256", hmacKey).update(ip).digest("hex");
     const { data, error } = await supabase.rpc("register_quote_attempt", {
       p_ip_hash: ipHash,
       p_max: MAX_PER_IP_PER_HOUR,
@@ -139,5 +143,5 @@ async function notifyNewQuote(data: z.infer<typeof quoteSchema>) {
     subject: `Nueva cotización: ${insurance} - ${data.fullName}`,
     text,
   });
-  if (error) console.error("resend", error);
+  if (error) console.error("resend", error.name, error.message);
 }

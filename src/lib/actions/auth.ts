@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { clientIp } from "@/lib/client-ip";
 import { createClient } from "@/lib/supabase/server";
 
 export type LoginState = { error?: string };
@@ -12,20 +13,21 @@ const loginSchema = z.object({
   password: z.string().min(1).max(200),
 });
 
-// Registro de intentos de acceso para detectar ataques (visible en los logs de Vercel).
+// Registro de accesos al panel para detectar ataques (visible en los logs de Vercel).
 // Nunca incluye la contraseña; del correo solo se guarda el dominio.
-async function logLoginFailure(reason: string, email?: string) {
-  const h = await headers();
-  console.warn(
-    JSON.stringify({
-      event: "admin_login_failed",
-      reason,
-      emailDomain: email?.split("@")[1],
-      ip: h.get("x-forwarded-for")?.split(",")[0]?.trim(),
-      at: new Date().toISOString(),
-    }),
-  );
+async function logAuthEvent(event: string, fields: { reason?: string; email?: string } = {}) {
+  const entry = JSON.stringify({
+    event,
+    reason: fields.reason,
+    emailDomain: fields.email?.split("@")[1],
+    ip: clientIp(await headers()),
+    at: new Date().toISOString(),
+  });
+  if (event === "admin_login_failed") console.warn(entry);
+  else console.info(entry);
 }
+
+const logLoginFailure = (reason: string, email?: string) => logAuthEvent("admin_login_failed", { reason, email });
 
 export async function login(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const parsed = loginSchema.safeParse({ email: formData.get("email"), password: formData.get("password") });
@@ -61,11 +63,13 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
     return { error: "Esta cuenta no tiene acceso al panel." };
   }
 
+  await logAuthEvent("admin_login_success", { email: parsed.data.email });
   redirect("/admin");
 }
 
 export async function logout() {
   const supabase = await createClient();
   await supabase.auth.signOut();
+  await logAuthEvent("admin_logout");
   redirect("/admin/login");
 }

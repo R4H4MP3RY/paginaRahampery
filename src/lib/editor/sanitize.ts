@@ -3,6 +3,38 @@ import sanitizeHtml from "sanitize-html";
 import { site } from "@/lib/site";
 
 const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).host : null;
+const siteOrigin = new URL(site.url).origin;
+const BLOG_IMAGES_PATH = "/storage/v1/object/public/blog/";
+
+// Se compara la URL ya interpretada, no el texto: "https://rahamperycontreras.mx.evil.com"
+// o "https://rahamperycontreras.mx@evil.com" empiezan igual que el sitio pero llevan a otro.
+function parseUrl(href: string) {
+  try {
+    return new URL(href);
+  } catch {
+    return null;
+  }
+}
+
+function isInternalLink(href: string) {
+  // Rutas propias ("/blog"), pero no "//otro-sitio" ni "/\otro-sitio", que el navegador trata como externas.
+  if (href.startsWith("/")) return !href.startsWith("//") && !href.startsWith("/\\");
+  return parseUrl(href)?.origin === siteOrigin;
+}
+
+function isOwnBlogImage(src: string | undefined) {
+  const url = src ? parseUrl(src) : null;
+  return (
+    !!url &&
+    !!supabaseHost &&
+    url.protocol === "https:" &&
+    url.host === supabaseHost &&
+    url.pathname.startsWith(BLOG_IMAGES_PATH) &&
+    !url.pathname.includes("..") &&
+    !url.username &&
+    !url.password
+  );
+}
 
 // Lista blanca estricta para el HTML de los artículos. Se aplica al guardar y otra vez
 // al mostrar: si alguien escribiera content_html directo en la base de datos (SQL Editor,
@@ -18,13 +50,13 @@ export function sanitizePostHtml(html: string) {
     allowedSchemesByTag: { img: ["https"] },
     allowProtocolRelative: false,
     // Solo imágenes subidas a nuestro Storage.
-    exclusiveFilter: (frame) =>
-      frame.tag === "img" && (!supabaseHost || !frame.attribs.src?.startsWith(`https://${supabaseHost}/storage/v1/object/public/blog/`)),
+    exclusiveFilter: (frame) => frame.tag === "img" && !isOwnBlogImage(frame.attribs.src),
     transformTags: {
       a: (tagName, attribs) => {
         const href = attribs.href ?? "";
-        const internal = href.startsWith("/") || href.startsWith(site.url);
-        const attrs: sanitizeHtml.Attributes = internal ? { href } : { href, target: "_blank", rel: "noopener noreferrer" };
+        const attrs: sanitizeHtml.Attributes = isInternalLink(href)
+          ? { href }
+          : { href, target: "_blank", rel: "noopener noreferrer" };
         return { tagName, attribs: attrs };
       },
       img: (tagName, attribs) => ({ tagName, attribs: { ...attribs, loading: "lazy", decoding: "async" } }),
