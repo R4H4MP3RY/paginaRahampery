@@ -9,6 +9,12 @@ updates:
       day: "monday"
       timezone: "America/Mexico_City"
     open-pull-requests-limit: 5
+    # Espera unos días antes de proponer una versión nueva: si alguien publica una versión
+    # maliciosa, suele detectarse y retirarse en ese tiempo. También evita que pnpm la
+    # rechace por su propia espera mínima (minimumReleaseAge).
+    cooldown:
+      default-days: 3
+      semver-major-days: 7
     groups:
       # Actualizaciones menores y parches juntos en un solo pull request.
       menores:

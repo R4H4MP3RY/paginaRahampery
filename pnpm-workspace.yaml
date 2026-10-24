@@ -9,16 +9,3 @@ peerDependencyRules:
     # @tiptap/html declara happy-dom ^20, pero toda la serie 20 es vulnerable
     # (GHSA-834v-8h66-3h79). Se usa 21.0.4, probada con el render del blog.
     "@tiptap/html>happy-dom": "21"
-minimumReleaseAgeExclude:
-  - '@next/env@16.4.3'
-  - '@next/swc-darwin-arm64@16.4.3'
-  - '@next/swc-darwin-x64@16.4.3'
-  - '@next/swc-linux-arm64-gnu@16.4.3'
-  - '@next/swc-linux-arm64-musl@16.4.3'
-  - '@next/swc-linux-x64-gnu@16.4.3'
-  - '@next/swc-linux-x64-musl@16.4.3'
-  - '@next/swc-win32-arm64-msvc@16.4.3'
-  - '@next/swc-win32-x64-msvc@16.4.3'
-  - next@16.4.3
-  - '@next/eslint-plugin-next@16.4.3'
-  - eslint-config-next@16.4.3
