@@ -1,0 +1,15 @@
+# GitHub revisa cada semana las librerías y abre un pull request cuando hay
+# actualizaciones. "npm" también cubre proyectos con pnpm (lee pnpm-lock.yaml).
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "America/Mexico_City"
+    open-pull-requests-limit: 5
+    groups:
+      # Actualizaciones menores y parches juntos en un solo pull request.
+      menores:
+        update-types: ["minor", "patch"]

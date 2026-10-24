@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { PostForm } from "@/components/admin/post-form";
+import { requireAdmin } from "@/lib/auth";
 
-export default function NewPostPage() {
+export default async function NewPostPage() {
+  await requireAdmin();
   return (
     <div className="grid gap-6">
       <div className="grid gap-1">

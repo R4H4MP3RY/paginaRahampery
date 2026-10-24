@@ -22,7 +22,16 @@
 
 # misc
 .DS_Store
+
+# llaves, certificados y credenciales
 *.pem
+*.key
+*.p12
+*.pfx
+*.jks
+credentials*.json
+service-account*.json
+.npmrc
 
 # debug
 npm-debug.log*

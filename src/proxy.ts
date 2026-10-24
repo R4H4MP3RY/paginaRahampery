@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { cookieOptions } from "@/lib/supabase/cookie-options";
 
 // Refresca la sesión de Supabase en el panel y redirige al login si no hay usuario.
 // Es solo una verificación optimista: cada página y acción del panel vuelve a validar
@@ -15,6 +16,7 @@ export async function proxy(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
+      cookieOptions,
       cookies: {
         getAll() {
           return request.cookies.getAll();

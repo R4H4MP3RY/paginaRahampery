@@ -1,0 +1,8 @@
+# Archivos que nunca deben subirse a Vercel al desplegar desde la terminal.
+.env*
+!.env.example
+*.pem
+*.key
+~
+.claude
+brand-nuevo/

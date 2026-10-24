@@ -22,7 +22,13 @@ export function ageFrom(birthDate: string, today = todayInMexico()) {
 }
 
 export const quoteSchema = z.object({
-  fullName: z.string().trim().min(2, "Escribe tu nombre completo").max(120),
+  fullName: z
+    .string()
+    .trim()
+    .min(2, "Escribe tu nombre completo")
+    .max(120)
+    // Sin saltos de línea: el nombre va en el asunto del correo de aviso.
+    .regex(/^[^\r\n]+$/, "Escribe tu nombre en una sola línea"),
   email: z.email("Escribe un correo válido").trim().max(254),
   phone: z
     .string()

@@ -1,4 +1,9 @@
 import "server-only";
+import { site } from "@/lib/site";
+
+// Dominios donde se muestra el widget: un token resuelto en otro sitio no se acepta.
+const domain = new URL(site.url).hostname;
+const allowedHostnames = new Set([domain, `www.${domain}`, "localhost"]);
 
 // Verifica el token anti-spam de Cloudflare Turnstile.
 export async function verifyTurnstile(token: string, ip?: string | null) {
@@ -17,6 +22,6 @@ export async function verifyTurnstile(token: string, ip?: string | null) {
     body,
   });
   if (!res.ok) return false;
-  const data = (await res.json()) as { success: boolean };
-  return data.success;
+  const data = (await res.json()) as { success: boolean; hostname?: string };
+  return data.success && allowedHostnames.has(data.hostname ?? "");
 }

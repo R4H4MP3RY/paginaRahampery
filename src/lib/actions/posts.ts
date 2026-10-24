@@ -7,12 +7,13 @@ import type { JSONContent } from "@tiptap/react";
 import { requireAdmin } from "@/lib/auth";
 import { postSchema, type PostFormState } from "@/lib/blog-schema";
 import { renderPostHtml } from "@/lib/editor/render";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { BLOG_TAG } from "@/lib/supabase/public";
 
 const optional = (v: FormDataEntryValue | null) => (typeof v === "string" && v.trim() !== "" ? v : undefined);
 
 export async function savePost(_prev: PostFormState, formData: FormData): Promise<PostFormState> {
-  const { supabase } = await requireAdmin();
+  const { supabase, userId } = await requireAdmin();
 
   const parsed = postSchema.safeParse({
     id: optional(formData.get("id")),
@@ -63,9 +64,12 @@ export async function savePost(_prev: PostFormState, formData: FormData): Promis
     published_at: publishedAt,
   };
 
+  // La sesión del administrador no puede escribir en posts (migración 0006): se guarda con
+  // la secret key, ya verificado el administrador y con el HTML sanitizado aquí mismo.
+  const admin = createAdminClient();
   const result = data.id
-    ? await supabase.from("posts").update(row).eq("id", data.id).select("id").single()
-    : await supabase.from("posts").insert(row).select("id").single();
+    ? await admin.from("posts").update(row).eq("id", data.id).select("id").single()
+    : await admin.from("posts").insert({ ...row, author_id: userId }).select("id").single();
 
   if (result.error) {
     if (result.error.code === "23505") {
