@@ -130,6 +130,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es-MX"
       suppressHydrationWarning
+      // Desplazamiento suave solo al hacer clic en anclas, no al cambiar de página.
+      data-scroll-behavior="smooth"
       className={cn("h-full", "antialiased", geistMono.variable, "font-sans", poppins.variable)}
     >
       <head>

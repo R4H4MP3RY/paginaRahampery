@@ -29,7 +29,6 @@ const csp = [
 ].join("; ");
 
 const securityHeaders = [
-  { key: "Content-Security-Policy", value: csp },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
@@ -45,7 +44,11 @@ const nextConfig: NextConfig = {
     remotePatterns: supabaseUrl ? [new URL(`${supabaseUrl}/storage/v1/object/public/blog/**`)] : [],
   },
   async headers() {
-    return [{ source: "/(.*)", headers: securityHeaders }];
+    return [
+      { source: "/(.*)", headers: securityHeaders },
+      // El panel (/admin) tiene su propia CSP estricta con nonce, definida en src/proxy.ts.
+      { source: "/((?!admin(?:/|$)).*)", headers: [{ key: "Content-Security-Policy", value: csp }] },
+    ];
   },
 };
 
