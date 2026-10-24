@@ -23,11 +23,11 @@ export const site = {
     message: "Deseo recibir más información para mejorar mi situación financiera.",
   },
   cnsf: {
-    cedula: "C358869",
+    cedula: "V428521",
     tipo: "A",
     ramo: "Riesgos personales y familiares",
-    // La cédula vence el 09/11/2026: renovar y actualizar esta fecha.
-    vigenteHasta: "2026-11-09",
+    // La cédula vence el 14/10/2029: renovar y actualizar esta fecha.
+    vigenteHasta: "2029-10-14",
   },
   quoteEmail: "contacto@rahamperycontreras.mx",
   supportEmail: "hola@rahamperycontreras.mx",
