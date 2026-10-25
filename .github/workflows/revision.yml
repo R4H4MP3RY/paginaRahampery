@@ -44,8 +44,12 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # Next genera los tipos de las rutas (PageProps, LayoutProps, imágenes); no se guardan
+      # en Git, así que hay que crearlos antes de revisar los tipos.
       - name: Tipos de TypeScript
-        run: pnpm exec tsc --noEmit
+        run: |
+          pnpm exec next typegen
+          pnpm exec tsc --noEmit
 
       - name: Compilación
         run: pnpm build

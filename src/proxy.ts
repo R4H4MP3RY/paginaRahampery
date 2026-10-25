@@ -31,6 +31,26 @@ function adminCsp(nonce: string) {
   ].join("; ");
 }
 
+// Antes del commit ec1a9ce las cookies de sesión usaban Path=/. Esas copias viejas no se
+// borran al cerrar sesión (ahora se usa Path=/admin) y el navegador las sigue enviando,
+// así que se expiran aquí. Se puede quitar después de 2026-12-31.
+// Se agrega al final con headers.append para no reemplazar las cookies de /admin del mismo nombre.
+// Solo al abrir /admin/login como página normal: en una Server Action que redirige, Next
+// mezcla las Set-Cookie de la respuesta con las cookies del pedido por nombre (sin ver la
+// ruta), y este borrado vaciaría la sesión al preparar la página siguiente.
+function expireLegacySessionCookies(request: NextRequest, res: NextResponse) {
+  const isLoginPageLoad =
+    request.method === "GET" && request.nextUrl.pathname === "/admin/login" && !request.headers.has("next-action");
+  if (!isLoginPageLoad) return res;
+
+  for (const { name } of request.cookies.getAll()) {
+    if (/^sb-.+-auth-token(\.\d+)?$/.test(name)) {
+      res.headers.append("Set-Cookie", `${name}=; Path=/; Max-Age=0; SameSite=Lax${isDev ? "" : "; Secure"}`);
+    }
+  }
+  return res;
+}
+
 // Refresca la sesión de Supabase en el panel y redirige al login si no hay usuario.
 // Es solo una verificación optimista: cada página y acción del panel vuelve a validar
 // que el usuario sea administrador (y RLS lo exige en la base de datos).
@@ -79,10 +99,10 @@ export async function proxy(request: NextRequest) {
     // Conserva las cookies que Supabase haya renovado o borrado (p. ej. una sesión vencida).
     response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
     redirect.headers.set("Content-Security-Policy", csp);
-    return redirect;
+    return expireLegacySessionCookies(request, redirect);
   }
   response.headers.set("Content-Security-Policy", csp);
-  return response;
+  return expireLegacySessionCookies(request, response);
 }
 
 export const config = {

@@ -4,6 +4,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { JSONContent } from "@tiptap/react";
+import { logAdminEvent } from "@/lib/admin-log";
 import { requireAdmin } from "@/lib/auth";
 import { postSchema, type PostFormState } from "@/lib/blog-schema";
 import { renderPostHtml } from "@/lib/editor/render";
@@ -79,6 +80,8 @@ export async function savePost(_prev: PostFormState, formData: FormData): Promis
     return { message: "No se pudo guardar. Inténtalo de nuevo." };
   }
 
+  await logAdminEvent(data.id ? `blog_post_${data.intent}` : "blog_post_created", { userId, target: result.data.id });
+
   // Refresca el blog público (lista, artículo y sitemap) y el listado del panel.
   updateTag(BLOG_TAG);
   revalidatePath("/admin/blog", "layout");
@@ -90,7 +93,7 @@ export async function savePost(_prev: PostFormState, formData: FormData): Promis
 }
 
 export async function deletePost(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase, userId } = await requireAdmin();
   const id = z.uuid().safeParse(formData.get("id"));
   if (!id.success) return;
 
@@ -99,6 +102,7 @@ export async function deletePost(formData: FormData) {
     console.error("delete post", error.code, error.message);
     return;
   }
+  await logAdminEvent("blog_post_deleted", { userId, target: id.data });
   updateTag(BLOG_TAG);
   revalidatePath("/admin/blog", "layout");
   redirect("/admin/blog");

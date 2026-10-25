@@ -1,26 +1,20 @@
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@supabase/supabase-js";
+import { createBlogImageUpload } from "@/lib/actions/uploads";
 
-const allowed: Record<string, string> = {
-  "image/jpeg": "jpg",
-  "image/png": "png",
-  "image/webp": "webp",
-  "image/avif": "avif",
-};
-const MAX_BYTES = 5 * 1024 * 1024;
+// Cliente sin sesión: la subida se autoriza con el permiso firmado que entrega el servidor.
+const storage = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!, {
+  auth: { persistSession: false, autoRefreshToken: false },
+}).storage;
 
-// Sube una imagen al bucket "blog" (RLS: solo administradores) y devuelve su ruta y URL pública.
+// Sube una imagen al bucket "blog" y devuelve su ruta y URL pública.
 export async function uploadBlogImage(file: File) {
-  const ext = allowed[file.type];
-  if (!ext) throw new Error("Formato no permitido. Usa JPG, PNG, WEBP o AVIF.");
-  if (file.size > MAX_BYTES) throw new Error("La imagen pesa más de 5 MB.");
+  const upload = await createBlogImageUpload({ type: file.type, size: file.size });
+  if (!upload.ok) throw new Error(upload.message);
 
-  const path = `${new Date().getFullYear()}/${crypto.randomUUID()}.${ext}`;
-  const supabase = createClient();
-  const { error } = await supabase.storage
+  const { error } = await storage
     .from("blog")
-    .upload(path, file, { cacheControl: "31536000", contentType: file.type, upsert: false });
+    .uploadToSignedUrl(upload.path, upload.token, file, { cacheControl: "31536000", contentType: file.type });
   if (error) throw new Error("No se pudo subir la imagen.");
 
-  const { data } = supabase.storage.from("blog").getPublicUrl(path);
-  return { path, url: data.publicUrl };
+  return { path: upload.path, url: upload.url };
 }

@@ -86,6 +86,11 @@ export default function AvisoDePrivacidad() {
             (Cloudflare Turnstile).
           </p>
           <p>
+            Por seguridad y para evitar spam, al enviar el formulario de cotización se procesa la dirección IP de tu
+            conexión: Cloudflare la usa para la verificación anti-spam, y nosotros guardamos solo una versión cifrada e
+            irreversible, por un periodo breve, para limitar el número de solicitudes. No la usamos para identificarte.
+          </p>
+          <p>
             Para conocer cómo se usa el sitio y mejorar su rendimiento utilizamos Vercel Web Analytics y Speed Insights,
             que obtienen estadísticas agregadas y anónimas (páginas visitadas, país, tipo de dispositivo y velocidad de
             carga) sin usar cookies ni identificarte personalmente.
@@ -94,7 +99,7 @@ export default function AvisoDePrivacidad() {
 
         <section>
           <h2>Cambios al aviso</h2>
-          <p>Cualquier cambio a este aviso se publicará en esta página. Última actualización: septiembre de 2026.</p>
+          <p>Cualquier cambio a este aviso se publicará en esta página. Última actualización: octubre de 2026.</p>
         </section>
       </article>
     </>
