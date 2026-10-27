@@ -147,7 +147,9 @@ export function CtaBand({
   return (
     <Section>
       <div className={container}>
-        <div className="bg-rc-brand-blue grid items-center gap-6 rounded-cta p-8 text-white sm:p-12 md:grid-cols-[1fr_auto]">
+        {/* En celular: un poco menos de relleno y el botón puede partirse en dos líneas,
+            para que ni el botón ni el título se salgan del recuadro. */}
+        <div className="bg-rc-brand-blue grid grid-cols-[minmax(0,1fr)] items-center gap-6 rounded-cta p-6 text-white sm:p-12 md:grid-cols-[1fr_auto]">
           <div className="grid gap-2">
             <h2 className="text-white">{title}</h2>
             <p className="text-[#e1eef7]">{text}</p>
@@ -156,7 +158,11 @@ export function CtaBand({
             href={whatsappUrl(message)}
             target="_blank"
             rel="noopener noreferrer"
-            className={buttonVariants({ variant: "accent", size: "xl", className: "justify-self-start" })}
+            className={buttonVariants({
+              variant: "accent",
+              size: "xl",
+              className: "text-rc-sm sm:text-rc-md max-w-full justify-self-start px-5 text-center whitespace-normal sm:px-8",
+            })}
           >
             <HugeiconsIcon icon={Calendar03Icon} />
             Agendar por WhatsApp

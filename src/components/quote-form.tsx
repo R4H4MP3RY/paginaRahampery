@@ -61,6 +61,9 @@ export function QuoteForm({ defaultInsurance }: { defaultInsurance?: string }) {
             autoComplete="bday"
             required
             aria-invalid={!!err("birthDate")}
+            // Safari en iPhone le da a los campos de fecha un ancho mínimo y una altura propios
+            // que desbordan la pantalla: se quitan para que mida como los demás campos.
+            className="max-w-full min-w-0 appearance-none [&::-webkit-date-and-time-value]:text-left"
           />
         </Field>
         <Field id="sex" label="Sexo" error={err("sex")}>

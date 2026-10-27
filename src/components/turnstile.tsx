@@ -6,7 +6,12 @@ import { useEffect, useRef, useState } from "react";
 type TurnstileApi = {
   render: (
     el: HTMLElement,
-    opts: { sitekey: string; language?: string; "error-callback"?: (code: string) => boolean },
+    opts: {
+      sitekey: string;
+      language?: string;
+      size?: "normal" | "compact";
+      "error-callback"?: (code: string) => boolean;
+    },
   ) => string;
   reset: (id: string) => void;
   remove: (id: string) => void;
@@ -31,6 +36,9 @@ export function Turnstile() {
     const id = window.turnstile.render(ref.current, {
       sitekey: siteKey,
       language: "es",
+      // El tamaño normal mide 300 px fijos y en celulares ensancha el formulario más allá
+      // de la pantalla; si no cabe, se usa el compacto (150 px).
+      size: ref.current.clientWidth < 300 ? "compact" : "normal",
       // El propio widget muestra el fallo y permite reintentar; devolver true evita que
       // Cloudflare lance un error sin manejar en la consola.
       "error-callback": () => true,
